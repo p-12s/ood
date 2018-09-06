@@ -98,20 +98,19 @@ public:
 	{
 		m_quackBehavior->Quack();
 	}
-	void Swim()
+	void Swim() const
 	{
 		cout << "I'm swimming" << endl;
 	}
 	void Fly()
 	{
-		m_flyBehavior->Fly();
+		m_flyBehavior->Fly(); // без смены стратегии
 	}
-	virtual void Dance()
+	virtual void Dance() const
 	{
 		m_danceBehavior->Dance();
-		//cout << "I'm Dancing" << endl;
 	}
-	void SetFlyBehavior(unique_ptr<IFlyBehavior>&& flyBehavior)
+	void SetFlyBehavior(unique_ptr<IFlyBehavior>&& flyBehavior) // так меняем стратегию полета
 	{
 		assert(flyBehavior);
 		m_flyBehavior = move(flyBehavior);
@@ -136,10 +135,6 @@ public:
 	{
 		cout << "I'm mallard duck" << endl;
 	}
-	void Dance() override 
-	{
-		cout << "I'm dancing valtz" << endl;
-	}
 };
 
 class RedheadDuck : public Duck
@@ -152,10 +147,6 @@ public:
 	void Display() const override
 	{
 		cout << "I'm redhead duck" << endl;
-	}
-	void Dance() override
-	{
-		cout << "I'm dancing minuet" << endl;
 	}
 };
 
@@ -170,7 +161,6 @@ public:
 	{
 		cout << "I'm decoy duck" << endl;
 	}
-	void Dance() override {}
 };
 
 class RubberDuck : public Duck
@@ -184,7 +174,6 @@ public:
 	{
 		cout << "I'm rubber duck" << endl;
 	}
-	void Dance() override {}
 };
 
 class ModelDuck : public Duck
@@ -198,7 +187,6 @@ public:
 	{
 		cout << "I'm model duck" << endl;
 	}
-	void Dance() override {}
 };
 
 void DrawDuck(Duck const& duck)
@@ -219,31 +207,24 @@ void PlayWithDuck(Duck& duck)
 void main()
 {
 	MallardDuck mallarDuck;
-	PlayWithDuck(mallarDuck);//MallardDuck умеет танцевать вальс
+	PlayWithDuck(mallarDuck);
 
 	RedheadDuck redheadDuck;
-	PlayWithDuck(redheadDuck);//RedHeadDuck – менуэт
+	PlayWithDuck(redheadDuck);
 
 	RubberDuck rubberDuck;
-	PlayWithDuck(rubberDuck);//Искусственные утки танцевать не умеют.
+	PlayWithDuck(rubberDuck);
 
 	DecoyDuck decoyDuck;
-	PlayWithDuck(decoyDuck);//Искусственные утки танцевать не умеют.
+	PlayWithDuck(decoyDuck);
 
 	ModelDuck modelDuck;
 	PlayWithDuck(modelDuck);
-	modelDuck.SetFlyBehavior(make_unique<FlyWithWings>());
+	modelDuck.SetFlyBehavior(make_unique<FlyWithWings>()); // поменяли поведение у нелетающей модели на полет
 	PlayWithDuck(modelDuck);
+	modelDuck.SetFlyBehavior(make_unique<FlyNoWay>()); // поменяли обратно
+	PlayWithDuck(modelDuck);
+	modelDuck.SetFlyBehavior(make_unique<FlyWithWings>()); // и еще раз обратно
+	PlayWithDuck(modelDuck);
+
 }
-
-/*
-Доработайте программу SimUDuck, научив уток танцевать с использованием паттерна «Стратегия». 
-MallardDuck умеет танцевать вальс, а RedHeadDuck – менуэт. 
-Искусственные утки танцевать не умеют.
-*/
-
-/*
-Доработайте программу SimUDuck таким образом, чтобы утки, умеющие летать, 
-вели учет количества вылетов и выводили порядковый номер своего вылета в stdout. 
-Примечание: от утки не требуется помнить число вылетов после смены стратегии полёта.
-*/
