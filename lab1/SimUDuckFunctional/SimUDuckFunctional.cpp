@@ -9,7 +9,7 @@ using namespace std;
 
 using Strategy = function<int(int x, int y)>;
 
-class Context // утка
+class Context // СѓС‚РєР°
 {
 public:
 	int PerformOperation(int x, int y)

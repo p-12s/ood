@@ -104,13 +104,13 @@ public:
 	}
 	void Fly()
 	{
-		m_flyBehavior->Fly(); // без смены стратегии
+		m_flyBehavior->Fly(); // выполнить определенную стратегию
 	}
 	virtual void Dance() const
 	{
 		m_danceBehavior->Dance();
 	}
-	void SetFlyBehavior(unique_ptr<IFlyBehavior>&& flyBehavior) // так меняем стратегию полета
+	void SetFlyBehavior(unique_ptr<IFlyBehavior>&& flyBehavior) // так можно поменять стратегию
 	{
 		assert(flyBehavior);
 		m_flyBehavior = move(flyBehavior);
@@ -220,11 +220,11 @@ void main()
 
 	ModelDuck modelDuck;
 	PlayWithDuck(modelDuck);
-	modelDuck.SetFlyBehavior(make_unique<FlyWithWings>()); // поменяли поведение у нелетающей модели на полет
+	modelDuck.SetFlyBehavior(make_unique<FlyWithWings>()); // РїРѕРјРµРЅСЏР»Рё РїРѕРІРµРґРµРЅРёРµ Сѓ РЅРµР»РµС‚Р°СЋС‰РµР№ РјРѕРґРµР»Рё РЅР° РїРѕР»РµС‚
 	PlayWithDuck(modelDuck);
-	modelDuck.SetFlyBehavior(make_unique<FlyNoWay>()); // поменяли обратно
+	modelDuck.SetFlyBehavior(make_unique<FlyNoWay>()); // РїРѕРјРµРЅСЏР»Рё РѕР±СЂР°С‚РЅРѕ
 	PlayWithDuck(modelDuck);
-	modelDuck.SetFlyBehavior(make_unique<FlyWithWings>()); // и еще раз обратно
+	modelDuck.SetFlyBehavior(make_unique<FlyWithWings>()); // Рё РµС‰Рµ СЂР°Р· РѕР±СЂР°С‚РЅРѕ
 	PlayWithDuck(modelDuck);
 
 }
