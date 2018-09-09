@@ -5,12 +5,12 @@
 
 using namespace std;
 
-struct IDanceBehavior
+struct IDanceBehavior // a common strategy
 {
 	virtual ~IDanceBehavior() {};
 	virtual void Dance() = 0;
 };
-class DanceValse : public IDanceBehavior
+class DanceValse : public IDanceBehavior // the concrete strategy
 {
 public:
 	void Dance() override
@@ -226,5 +226,4 @@ void main()
 	PlayWithDuck(modelDuck);
 	modelDuck.SetFlyBehavior(make_unique<FlyWithWings>()); // And let it fly again.
 	PlayWithDuck(modelDuck);
-
 }
