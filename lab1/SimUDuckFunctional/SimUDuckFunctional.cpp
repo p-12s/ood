@@ -1,74 +1,206 @@
 #include "stdafx.h"
-#include <algorithm>
-#include <functional>
-#include <iostream>
-#include <string>
 
 // lambdas
 // https://github.com/alexey-malov/oop/blob/master/samples/01-basics/lambdas/main.cpp
+
+
 using namespace std;
 
-using Strategy = function<int(int x, int y)>; // strategy - вроде что-то с void
 
-class Context // Duck
+using FlyBehavior = function<void()>; // перекинуть обратно
+using QuackBehavior = function<void()>;
+using DanceBehavior = function<void()>;
+
+FlyBehavior FlyWithWings() // TODO переделать без лямбды
+{
+	unsigned int numberOfFlights = 1;
+	return [=]() mutable {
+		cout << "I'm flying with wings!! " << numberOfFlights << endl;
+		++numberOfFlights;
+	};
+}
+void FlyNoWay()
+{
+}
+
+//using QuackBehavior = function<void()>;
+void Quack()
+{
+	cout << "Quack Quack!!!" << endl;
+}
+void Squeak()
+{
+	cout << "Squeek!!!" << endl;
+};
+void MuteQuack()
+{
+};
+
+//using DanceBehavior = function<void()>;
+void DanceValse()
+{
+	cout << "I'm dancing valse" << endl;
+}
+void DanceMinuet()
+{
+	cout << "I'm dancing minuet" << endl;
+}
+void DanceNoWay()
+{
+}
+
+class Duck // Duck
 {
 public:
-	int PerformOperation(int x, int y)
+	Duck( // почему конст и мув?
+		FlyBehavior const& flyBehavior,
+		QuackBehavior const& quackBehavior,
+		DanceBehavior const& danceBehavior)
+		//: m_flyBehavior(flyBehavior)
+		: m_quackBehavior(quackBehavior)
+		, m_danceBehavior(move(danceBehavior))
 	{
-		if (m_strategy)
-		{
-			return m_strategy(x, y);//вернет стратегию, которая яв-ся полем класса
-		}
-		return 0;
+		SetFlyBehavior(flyBehavior);
 	}
-	void SetStrategy(const Strategy& s) // проинициализируем стратегию
+	void Fly() //const
 	{
-		m_strategy = s;
+		m_flyBehavior();
 	}
+	void Quack() const
+	{
+		m_quackBehavior();
+	}
+	virtual void Dance() // const ,надо? почему вирутальный только он?
+	{
+		m_danceBehavior();
+	}
+	void SetFlyBehavior(FlyBehavior const& flyBehavior)
+	{
+		m_flyBehavior = flyBehavior;
+	}
+	void Swim() const
+	{
+		cout << "I'm swimming" << endl;
+	}
+	virtual void Display() const = 0;
+	virtual ~Duck() = default;
 
 private:
-	Strategy m_strategy;
+	FlyBehavior m_flyBehavior;
+	QuackBehavior m_quackBehavior;
+	DanceBehavior m_danceBehavior;
 };
-// переименовать в утку или что там
-// добавить стратегий
 
-
-
-int AddingStrategy(int x, int y)
+void DrawDuck(Duck const& duck)
 {
-	return x + y;
+	duck.Display();
+}
+void PlayWithDuck(Duck& duck)
+{
+	DrawDuck(duck);
+	duck.Fly();
+	duck.Quack();
+	duck.Dance();
+	cout << endl;
 }
 
-int SubtractionStrategy(int x, int y)
+class MallardDuck : public Duck
 {
-	return x - y;
-}
+public:
+	MallardDuck()
+		: Duck(FlyWithWings(), Quack, DanceValse)
+	{
+	}
+
+	void Display() const override
+	{
+		cout << "I'm mallard duck" << endl;
+	}
+};
+
+class RedheadDuck : public Duck
+{
+public:
+	RedheadDuck()
+		: Duck(FlyWithWings(), Quack, DanceMinuet)
+	{
+	}
+	void Display() const override
+	{
+		cout << "I'm redhead duck" << endl;
+	}
+};
+
+class DecoyDuck : public Duck
+{
+public:
+	DecoyDuck()
+		: Duck(FlyNoWay, MuteQuack, DanceNoWay)
+	{
+	}
+	void Display() const override
+	{
+		cout << "I'm decoy duck" << endl;
+	}
+};
+
+class RubberDuck : public Duck
+{
+public:
+	RubberDuck()
+		: Duck(FlyNoWay, Squeak, DanceNoWay)
+	{
+	}
+	void Display() const override
+	{
+		cout << "I'm rubber duck" << endl;
+	}
+};
+/*
+class ModelDuck : public Duck
+{
+public:
+	ModelDuck()
+		: Duck(FlyNoWay, Quack, DanceNoWay)
+	{
+	}
+	void Display() const override
+	{
+		cout << "I'm model duck" << endl;
+	}
+};*/
+
+class ModelDuck : public Duck
+{
+public:
+	ModelDuck()
+		: Duck(FlyNoWay, Quack, DanceNoWay)
+	{
+	}
+	void Display() const override
+	{
+		cout << "I'm model duck" << endl;
+	}
+};
 
 void main()
 {
-	{
-		int numbers[] = { 6, 3, 2, 1, 3, 4 };
-		sort(begin(numbers), end(numbers), [](int x, int y) { return x < y; });
-		// отсортировало: 1, 2, 3, 3, 4, 6 - лучше запомнить, f11 непонятно
-		sort(begin(numbers), end(numbers), less<int>());// аналог предыдущей
+	MallardDuck mallarDuck;
+	PlayWithDuck(mallarDuck);
 
-		function<bool(int, int)> compare = [](int x, int y) { return x < y; };
-		sort(begin(numbers), end(numbers), compare);
-	}
-	{
-		Context ctx;
+	RedheadDuck redheadDuck;
+	PlayWithDuck(redheadDuck);
 
-		ctx.SetStrategy([](int x, int y) { return x + y; });//принимает 2 инта, возвр. инт
-		cout << ctx.PerformOperation(1, 2) << endl;// 3
-		// теперь стратегия проинициализирована, до этого была пуста
+	RubberDuck rubberDuck;
+	PlayWithDuck(rubberDuck);
+
+	DecoyDuck decoyDuck;
+	PlayWithDuck(decoyDuck);
 
 
-		ctx.SetStrategy(AddingStrategy); // вот так меняя стратегии, выполняется оператор
-		cout << ctx.PerformOperation(1, 2) << endl;//3
 
-		ctx.SetStrategy(SubtractionStrategy);
-		cout << ctx.PerformOperation(1, 2) << endl;//-1
-	}
+
+		
 }
 
 /*
