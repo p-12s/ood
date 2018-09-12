@@ -3,9 +3,7 @@
 // lambdas
 // https://github.com/alexey-malov/oop/blob/master/samples/01-basics/lambdas/main.cpp
 
-
 using namespace std;
-
 
 using FlyBehavior = function<void()>; // перекинуть обратно
 using QuackBehavior = function<void()>;
@@ -32,9 +30,7 @@ void Squeak()
 {
 	cout << "Squeek!!!" << endl;
 };
-void MuteQuack()
-{
-};
+void MuteQuack(){};
 
 //using DanceBehavior = function<void()>;
 void DanceValse()
@@ -196,11 +192,6 @@ void main()
 
 	DecoyDuck decoyDuck;
 	PlayWithDuck(decoyDuck);
-
-
-
-
-		
 }
 
 /*

@@ -7,7 +7,7 @@ using namespace std;
 
 struct IDanceBehavior // a common strategy
 {
-	virtual ~IDanceBehavior() {};
+	virtual ~IDanceBehavior(){};
 	virtual void Dance() = 0;
 };
 class DanceValse : public IDanceBehavior // the concrete strategy
@@ -34,7 +34,7 @@ public:
 
 struct IFlyBehavior
 {
-	virtual ~IFlyBehavior() {};
+	virtual ~IFlyBehavior(){};
 	virtual void Fly() = 0;
 };
 class FlyWithWings : public IFlyBehavior
@@ -45,6 +45,7 @@ public:
 		++m_numberOfFlights;
 		cout << "I'm flying with wings!! " << m_numberOfFlights << endl;
 	}
+
 private:
 	int m_numberOfFlights = 0;
 };
@@ -56,7 +57,7 @@ public:
 
 struct IQuackBehavior
 {
-	virtual ~IQuackBehavior() {};
+	virtual ~IQuackBehavior(){};
 	virtual void Quack() = 0;
 };
 class QuackBehavior : public IQuackBehavior
@@ -98,7 +99,7 @@ public:
 	{
 		m_quackBehavior->Quack();
 	}
-	
+
 	void Fly() const
 	{
 		m_flyBehavior->Fly(); // only execute the strategy, change it is impossible
