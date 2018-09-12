@@ -98,11 +98,8 @@ public:
 	{
 		m_quackBehavior->Quack();
 	}
-	void Swim() const
-	{
-		cout << "I'm swimming" << endl;
-	}
-	void Fly()
+	
+	void Fly() const
 	{
 		m_flyBehavior->Fly(); // only execute the strategy, change it is impossible
 	}
@@ -114,6 +111,10 @@ public:
 	{
 		assert(flyBehavior);
 		m_flyBehavior = move(flyBehavior);
+	}
+	void Swim() const
+	{
+		cout << "I'm swimming" << endl;
 	}
 	virtual void Display() const = 0;
 	virtual ~Duck() = default;
@@ -198,7 +199,6 @@ void PlayWithDuck(Duck& duck)
 {
 	DrawDuck(duck);
 	duck.Quack();
-	duck.Fly();
 	duck.Fly();
 	duck.Dance();
 	cout << endl;
