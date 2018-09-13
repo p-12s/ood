@@ -113,7 +113,7 @@ public:
 		assert(flyBehavior);
 		m_flyBehavior = move(flyBehavior);
 	}
-	void Swim() const
+	static void Swim()
 	{
 		cout << "I'm swimming" << endl;
 	}
