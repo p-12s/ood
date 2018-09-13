@@ -1,27 +1,23 @@
 #include "stdafx.h"
 
-// lambdas
-// https://github.com/alexey-malov/oop/blob/master/samples/01-basics/lambdas/main.cpp
-
 using namespace std;
 
-using FlyBehavior = function<void()>; // перекинуть обратно
-using QuackBehavior = function<void()>;
-using DanceBehavior = function<void()>;
-
-FlyBehavior FlyWithWings() // TODO переделать без лямбды
+// https://github.com/alexey-malov/oop/blob/master/samples/01-basics/lambdas/main.cpp
+using FlyBehavior = function<void()>;
+FlyBehavior FlyWithWings()
 {
 	unsigned int numberOfFlights = 1;
 	return [=]() mutable {
 		cout << "I'm flying with wings!! " << numberOfFlights << endl;
 		++numberOfFlights;
+		// variables is captured by the value (which can be changed inside the lambda)
 	};
 }
 void FlyNoWay()
 {
 }
 
-//using QuackBehavior = function<void()>;
+using QuackBehavior = function<void()>;
 void DoQuack()
 {
 	cout << "Quack Quack!!!" << endl;
@@ -30,11 +26,9 @@ void Squeak()
 {
 	cout << "Squeek!!!" << endl;
 };
-void MuteQuack()
-{
-};
+void MuteQuack(){};
 
-//using DanceBehavior = function<void()>;
+using DanceBehavior = function<void()>;
 void DanceValse()
 {
 	cout << "I'm dancing valse" << endl;
@@ -47,28 +41,27 @@ void DanceNoWay()
 {
 }
 
-class Duck // Duck
+class Duck
 {
 public:
-	Duck( // почему конст и мув?
+	Duck(
 		FlyBehavior const& flyBehavior,
 		QuackBehavior const& quackBehavior,
 		DanceBehavior const& danceBehavior)
-		//: m_flyBehavior(flyBehavior)
 		: m_quackBehavior(quackBehavior)
 		, m_danceBehavior(danceBehavior)
 	{
 		SetFlyBehavior(flyBehavior);
 	}
-	void Fly() //const
+	void Fly() const
 	{
 		m_flyBehavior();
 	}
-	void Quack()
+	void Quack() const
 	{
 		m_quackBehavior();
 	}
-	void Dance() // const ,надо? почему вирутальный только он?
+	void Dance() const
 	{
 		m_danceBehavior();
 	}
@@ -76,7 +69,7 @@ public:
 	{
 		m_flyBehavior = flyBehavior;
 	}
-	void Swim() const
+	static void Swim()
 	{
 		cout << "I'm swimming" << endl;
 	}
@@ -97,6 +90,7 @@ void PlayWithDuck(Duck& duck)
 {
 	DrawDuck(duck);
 	duck.Fly();
+	duck.Fly();
 	duck.Quack();
 	duck.Dance();
 	cout << endl;
@@ -115,7 +109,6 @@ public:
 		cout << "I'm mallard duck" << endl;
 	}
 };
-
 class RedheadDuck : public Duck
 {
 public:
@@ -128,7 +121,6 @@ public:
 		cout << "I'm redhead duck" << endl;
 	}
 };
-
 class DecoyDuck : public Duck
 {
 public:
@@ -141,7 +133,6 @@ public:
 		cout << "I'm decoy duck" << endl;
 	}
 };
-
 class RubberDuck : public Duck
 {
 public:
@@ -154,20 +145,6 @@ public:
 		cout << "I'm rubber duck" << endl;
 	}
 };
-/*
-class ModelDuck : public Duck
-{
-public:
-	ModelDuck()
-		: Duck(FlyNoWay, Quack, DanceNoWay)
-	{
-	}
-	void Display() const override
-	{
-		cout << "I'm model duck" << endl;
-	}
-};*/
-
 class ModelDuck : public Duck
 {
 public:
@@ -194,9 +171,13 @@ void main()
 
 	DecoyDuck decoyDuck;
 	PlayWithDuck(decoyDuck);
+
+	ModelDuck modelDuck;
+	PlayWithDuck(modelDuck);
+	modelDuck.SetFlyBehavior(FlyWithWings());
+	PlayWithDuck(modelDuck);
+	modelDuck.SetFlyBehavior(FlyNoWay);
+	PlayWithDuck(modelDuck);
+	modelDuck.SetFlyBehavior(FlyWithWings());
+	PlayWithDuck(modelDuck);
 }
-
-/*
-
-Перепишите приложение SimUDuck, реализовав паттерн «Стратегия» в функциональном стиле.
-*/
