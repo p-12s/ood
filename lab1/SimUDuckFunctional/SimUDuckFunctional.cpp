@@ -22,7 +22,7 @@ void FlyNoWay()
 }
 
 //using QuackBehavior = function<void()>;
-void Quack()
+void DoQuack()
 {
 	cout << "Quack Quack!!!" << endl;
 }
@@ -30,7 +30,9 @@ void Squeak()
 {
 	cout << "Squeek!!!" << endl;
 };
-void MuteQuack(){};
+void MuteQuack()
+{
+};
 
 //using DanceBehavior = function<void()>;
 void DanceValse()
@@ -54,7 +56,7 @@ public:
 		DanceBehavior const& danceBehavior)
 		//: m_flyBehavior(flyBehavior)
 		: m_quackBehavior(quackBehavior)
-		, m_danceBehavior(move(danceBehavior))
+		, m_danceBehavior(danceBehavior)
 	{
 		SetFlyBehavior(flyBehavior);
 	}
@@ -62,11 +64,11 @@ public:
 	{
 		m_flyBehavior();
 	}
-	void Quack() const
+	void Quack()
 	{
 		m_quackBehavior();
 	}
-	virtual void Dance() // const ,надо? почему вирутальный только он?
+	void Dance() // const ,надо? почему вирутальный только он?
 	{
 		m_danceBehavior();
 	}
@@ -104,7 +106,7 @@ class MallardDuck : public Duck
 {
 public:
 	MallardDuck()
-		: Duck(FlyWithWings(), Quack, DanceValse)
+		: Duck(FlyWithWings(), DoQuack, DanceValse)
 	{
 	}
 
@@ -118,7 +120,7 @@ class RedheadDuck : public Duck
 {
 public:
 	RedheadDuck()
-		: Duck(FlyWithWings(), Quack, DanceMinuet)
+		: Duck(FlyWithWings(), DoQuack, DanceMinuet)
 	{
 	}
 	void Display() const override
@@ -170,7 +172,7 @@ class ModelDuck : public Duck
 {
 public:
 	ModelDuck()
-		: Duck(FlyNoWay, Quack, DanceNoWay)
+		: Duck(FlyNoWay, DoQuack, DanceNoWay)
 	{
 	}
 	void Display() const override
