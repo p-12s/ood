@@ -1,4 +1,7 @@
-namespace WeatherStation
+﻿using System;
+using WeatherStation;
+
+namespace WeatherStationApp
 {
     class Program
     {
