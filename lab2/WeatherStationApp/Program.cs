@@ -7,12 +7,12 @@ namespace WeatherStationApp
     {
         static void Main(string[] args)
         {
-            CWeatherData wd = new CWeatherData();
+            WeatherData wd = new WeatherData();
 
-            CDisplay display = new CDisplay();
+            Display display = new Display();
             wd.RegisterObserver(display);
 
-            CStatsDisplay statsDisplay = new CStatsDisplay();
+            StatsDisplay statsDisplay = new StatsDisplay();
             wd.RegisterObserver(statsDisplay);
 
             wd.SetMeasurements(3, 0.7, 760);

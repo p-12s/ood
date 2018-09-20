@@ -15,8 +15,7 @@ namespace WeatherStation
         void RemoveObserver(IObserver<T> observer);
     };
 
-
-    public class CObservable<T> : IObservable<T>
+    public class Observable<T> : IObservable<T>
     {
         public void RegisterObserver(IObserver<T> observer)
         {
@@ -27,10 +26,10 @@ namespace WeatherStation
         {
             T data = GetChangedData();
 
-            //var observersClone = observers;
-            foreach (var observer in observers) 
+            var observersClone = new List<IObserver<T>>(observers);
+            foreach (var observer in observersClone)
             {
-                observer.Update(data); // подписать нового, или удалить 
+                observer.Update(data);
             }
         }
 
@@ -52,22 +51,22 @@ namespace WeatherStation
         public double temperature, humidity, pressure;
     };
 
-    // самоудаляющийся класс
-    public class CSelfRemovableDisplay : IObserver<SWeatherInfo>
+    // самоудаляющийся наблюдатель
+    public class SelfRemovableDisplay : IObserver<SWeatherInfo>
     {
-        public CSelfRemovableDisplay()
+        private WeatherData subject;
+        public SelfRemovableDisplay(WeatherData weatherData)
         {
-            data = new CWeatherData();
+            subject = weatherData;
         }
 
         public void Update(SWeatherInfo data)
         {
-            this.data.RemoveObserver(this);
+            subject.RemoveObserver(this);
         }
-        private CWeatherData data;
     };
 
-    public class CDisplay : IObserver<SWeatherInfo>
+    public class Display : IObserver<SWeatherInfo>
     {
         public void Update(SWeatherInfo data)
         {
@@ -76,7 +75,7 @@ namespace WeatherStation
         }
     };
 
-    public class CStatsDisplay : IObserver<SWeatherInfo>
+    public class StatsDisplay : IObserver<SWeatherInfo>
     {
         public void Update(SWeatherInfo data)
         {
@@ -91,7 +90,7 @@ namespace WeatherStation
             Console.WriteLine();
         }
 
-        private void PrintStatistics(string statisticName, CStatistics statistics)
+        private void PrintStatistics(string statisticName, Statistics statistics)
         {
             Console.WriteLine("{0} Max: {1} Min: {2} Average: {3}",
                 statisticName,
@@ -100,12 +99,12 @@ namespace WeatherStation
                 Math.Round(statistics.Averrage(), 1));
         }
 
-        private CStatistics m_temperatureStatistics = new CStatistics();
-        private CStatistics m_presureStatistics = new CStatistics();
-        private CStatistics m_humidityStatistics = new CStatistics();
+        private Statistics m_temperatureStatistics = new Statistics();
+        private Statistics m_presureStatistics = new Statistics();
+        private Statistics m_humidityStatistics = new Statistics();
     };
 
-    class CStatistics
+    class Statistics
     {
         public void AddValue(double value)
         {
@@ -142,9 +141,7 @@ namespace WeatherStation
         private double m_countAcc = 0;
     };
 
-    
-
-    public class CWeatherData : CObservable<SWeatherInfo>
+    public class WeatherData : Observable<SWeatherInfo>
     {
         public double GetTemperature()
         {
@@ -174,6 +171,7 @@ namespace WeatherStation
 
             MeasurementsChanged();
         }
+
         protected override SWeatherInfo GetChangedData()
         {
             return new SWeatherInfo
