@@ -4,10 +4,10 @@
     {
         public Beverage(string name)
         {
-            this.Name = name;
+            this.name = name;
         }
 
-        public string Name { get; protected set; }
+        public string name { get; protected set; } // private?
 
         public abstract int GetCost();
     }
@@ -17,17 +17,49 @@
         public Coffee() : base("Coffee")
         {
         }
-
+        
         public override int GetCost()
         {
-            return 60;
+            return 0; // хак
         }
     }
 
+    public enum GradeOfTea
+    {
+        Chinese,
+        Indian,
+        Japanese,
+        Vietnamese
+    };
+
     public class Tea : Beverage
     {
-        public Tea() : base("Tea")
+        private static GradeOfTea gradeOfTea;
+
+        private static string GetGradeName(GradeOfTea grade)
         {
+            switch(grade)
+            {
+                case GradeOfTea.Indian:
+                    return "Indian";
+
+                case GradeOfTea.Chinese:
+                    return "Chinese";
+
+                case GradeOfTea.Japanese:
+                    return "Japanese";
+
+                case GradeOfTea.Vietnamese:
+                    return "Vietnamese";
+
+                default:
+                    return "Uncknown";
+            }
+        }
+
+        public Tea(GradeOfTea grade = GradeOfTea.Indian) : base(GetGradeName(grade) + " Tea")
+        {
+            gradeOfTea = grade;
         }
 
         public override int GetCost()
@@ -36,161 +68,45 @@
         }
     }
 
+    // Размер порции молочного коктейля
+    public enum MilkShakeSize
+    {
+        Small,
+	    Medium,
+	    Large
+    };
+
     public class Milkshake : Beverage
     {
-        public Milkshake() : base("Milkshake")
+        private MilkShakeSize milkShakeSize;
+
+        private static string GetGradeName(MilkShakeSize size)
         {
+            switch (size)
+            {
+                case MilkShakeSize.Small:
+                    return "Small";
+
+                case MilkShakeSize.Medium:
+                    return "Medium";
+
+                case MilkShakeSize.Large:
+                    return "Large";
+
+                default:
+                    return "Uncknown";
+            }
+        }
+
+        public Milkshake(MilkShakeSize size = MilkShakeSize.Large) : base(GetGradeName(size) + " Milkshake")
+        {
+            milkShakeSize = size;
         }
 
         public override int GetCost()
         {
-            return 80;
-        }
-    }
-
-    public abstract class BeverageDecorator : Beverage
-    {
-        protected Beverage beverage;
-
-        public BeverageDecorator(string name, Beverage beverage) : base(name)
-        {
-            this.beverage = beverage;
-        }
-    }
-
-    public class Capuccino : BeverageDecorator
-    {
-        public Capuccino(Beverage p) : base(p.Name + " Capuccino", p)
-        {
-        }
-
-        public override int GetCost()
-        {
-            return beverage.GetCost() + 80;
-        }
-    }
-
-    public class Latte : BeverageDecorator
-    {
-        public Latte(Beverage p) : base(p.Name + " Latte", p)
-        {
-        }
-
-        public override int GetCost()
-        {
-            return beverage.GetCost() + 90;
-        }
-    }
-
-    // Добавка из корицы
-    public class Cinnamon : BeverageDecorator
-    {
-        public Cinnamon(Beverage p) : base(p.Name + ", Cinnamon", p)
-        {
-        }
-
-        public override int GetCost()
-        {
-            return beverage.GetCost() + 20;
-        }
-    }
-
-    // Лимонная добавка
-    public class Lemon : BeverageDecorator
-    {
-        private int Quantity;
-        public Lemon(Beverage p, int quantity = 1) : base(p.Name + ", Lemon x" + quantity, p)
-        {
-            Quantity = quantity;
-        }
-
-        public override int GetCost()
-        {
-            return beverage.GetCost() + (10 * Quantity);
-        }
-    }
-
-    public enum IceCubeType
-    {
-        Dry,	// Сухой лед (для суровых сибирских мужиков)
-	    Water   // Обычные кубики из воды
-    };
-    
-    // Добавка "Кубики льда". Определяется типом и количеством кубиков, что влияет на стоимость и описание
-    public class IceCubes : BeverageDecorator
-    {
-        private int Quantity;
-        private IceCubeType Type;
-
-        public IceCubes(Beverage p, int quantity = 1, IceCubeType type = IceCubeType.Water) 
-            : base(p.Name + ", " + ((type == IceCubeType.Water) ? "Water " : "Dry ") + 
-                  "ice cubes x" + quantity, p)
-        {
-            Quantity = quantity;
-            Type = type;
-        }
-
-        public override int GetCost()
-        {
-            return beverage.GetCost() + ((Type == IceCubeType.Dry ? 10 : 5) * Quantity);
-        }
-    }
-
-    // Тип сиропа
-    public enum SyrupType
-    {
-        Chocolate,	// Шоколадный
-	    Maple,		// Кленовый
-    }
-
-    public class Syrup : BeverageDecorator
-    {
-        private SyrupType SyrupType;
-
-        public Syrup(Beverage p, SyrupType syrupType)
-            : base(p.Name + ", " + ((syrupType == SyrupType.Chocolate) ? "Chocolate " : "Maple ") +
-                  "syrup", p)
-        {
-            SyrupType = syrupType;
-        }
-
-        public override int GetCost()
-        {
-            return beverage.GetCost() + 15;
-        }
-    }
-
-    // Шоколадная крошка
-    public class ChocolateCrumbs : BeverageDecorator
-    {
-        private int Mass;
-
-        public ChocolateCrumbs(Beverage p, int mass)
-            : base(p.Name + ", Chocolate crumbs " + mass.ToString() + "g", p)
-        {
-            Mass = mass;
-        }
-
-        public override int GetCost()
-        {
-            return beverage.GetCost() + (2 * Mass);
-        }
-    }
-
-    // Кокосовая крошка
-    public class CoconutFlakes : BeverageDecorator
-    {
-        private int Mass;
-
-        public CoconutFlakes(Beverage p, int mass)
-            : base(p.Name + ", Coconut flakes " + mass.ToString() + "g", p)
-        {
-            Mass = mass;
-        }
-
-        public override int GetCost()
-        {
-            return beverage.GetCost() + (1 * Mass);
+            return (milkShakeSize == MilkShakeSize.Small ? 50 : 
+                milkShakeSize == MilkShakeSize.Medium ? 60 : 80);
         }
     }
 
