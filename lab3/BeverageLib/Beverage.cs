@@ -1,26 +1,53 @@
 ﻿namespace BeverageLib
 {
-    public abstract class Beverage
+    public abstract class Beverage 
     {
-        public Beverage(string name)
-        {
-            this.name = name;
-        }
+        public string _description { get; protected set; }
 
-        public string name { get; protected set; } // private?
+        public Beverage(string description)
+        {
+            _description = description;
+        }
 
         public abstract int GetCost();
     }
 
-    public class Coffee : Beverage
+    // Размер порции кофе
+    public enum CoffeeSize
     {
-        public Coffee() : base("Coffee")
+        Standard,
+        Double
+    };
+
+    public class Capuccino : Beverage
+    {
+        private CoffeeSize _coffeeSize;
+
+        public Capuccino(CoffeeSize coffeeSize = CoffeeSize.Standard)
+            : base("Capuccino")
         {
+            _coffeeSize = coffeeSize;
         }
         
         public override int GetCost()
         {
-            return 0; // хак
+            return _coffeeSize == CoffeeSize.Standard ? 80 : 120;
+        }
+    }
+
+    public class Latte : Beverage
+    {
+        private CoffeeSize _coffeeSize;
+
+        public Latte(CoffeeSize coffeeSize = CoffeeSize.Standard)
+            : base("Latte")
+        {
+            _coffeeSize = coffeeSize;
+        }
+
+        public override int GetCost()
+        {
+            return _coffeeSize == CoffeeSize.Standard ? 90 : 130;
         }
     }
 
@@ -34,11 +61,11 @@
 
     public class Tea : Beverage
     {
-        private static GradeOfTea gradeOfTea;
+        private static GradeOfTea _gradeOfTea;
 
-        private static string GetGradeName(GradeOfTea grade)
+        private static string GetGradeName(GradeOfTea gradeOfTea)
         {
-            switch(grade)
+            switch(gradeOfTea)
             {
                 case GradeOfTea.Indian:
                     return "Indian";
@@ -53,13 +80,14 @@
                     return "Vietnamese";
 
                 default:
-                    return "Uncknown";
+                    return "Unknown";
             }
         }
 
-        public Tea(GradeOfTea grade = GradeOfTea.Indian) : base(GetGradeName(grade) + " Tea")
+        public Tea(GradeOfTea gradeOfTea = GradeOfTea.Indian) : 
+            base(GetGradeName(gradeOfTea) + " Tea")
         {
-            gradeOfTea = grade;
+            _gradeOfTea = gradeOfTea;
         }
 
         public override int GetCost()
@@ -78,11 +106,11 @@
 
     public class Milkshake : Beverage
     {
-        private MilkShakeSize milkShakeSize;
+        private static MilkShakeSize _milkShakeSize;
 
-        private static string GetGradeName(MilkShakeSize size)
+        private static string GetGradeName(MilkShakeSize milkShakeSize)
         {
-            switch (size)
+            switch (milkShakeSize)
             {
                 case MilkShakeSize.Small:
                     return "Small";
@@ -98,15 +126,16 @@
             }
         }
 
-        public Milkshake(MilkShakeSize size = MilkShakeSize.Large) : base(GetGradeName(size) + " Milkshake")
+        public Milkshake(MilkShakeSize milkShakeSize = MilkShakeSize.Large) : 
+            base(GetGradeName(milkShakeSize) + " Milkshake")
         {
-            milkShakeSize = size;
+            _milkShakeSize = milkShakeSize;
         }
 
         public override int GetCost()
         {
-            return (milkShakeSize == MilkShakeSize.Small ? 50 : 
-                milkShakeSize == MilkShakeSize.Medium ? 60 : 80);
+            return (_milkShakeSize == MilkShakeSize.Small ? 50 :
+                _milkShakeSize == MilkShakeSize.Medium ? 60 : 80);
         }
     }
 

@@ -7,60 +7,36 @@ namespace BeverageApp
     {
         public static void PrintBeverage(Beverage beverage)
         {
-            Console.WriteLine("Name: {0}\nCosts: {1}\n", beverage.name, beverage.GetCost());
+            Console.WriteLine("Name: {0}\nCosts: {1}\n", beverage._description, beverage.GetCost());
         }
 
         static void Main(string[] args)
         {
-            /*latte = new Cinnamon(latte);
-            Beverage latte = new Coffee(); // тут странно, приходится кофе делать цену 0
-            latte = new Latte(latte);
-            latte = new Lemon(latte, 2);
-            latte = new IceCubes(latte, 2, IceCubeType.Dry);
-            latte = new ChocolateCrumbs(latte, 2);
+            Beverage latte = new Latte(); // 90
+            latte = new Cinnamon(latte); // 20
+            latte = new ChocolateCrumbs(latte, 2); // 2*2
+            PrintBeverage(latte);
 
-            PrintBeverage(latte);*/
+            Beverage capuccino = new Capuccino(CoffeeSize.Double); // 120
+            capuccino = new Cinnamon(capuccino); // 20
+            capuccino = new ChocolateCrumbs(capuccino, 2); // 2*2
+            PrintBeverage(capuccino);
+             
+            Beverage tea = new Tea(GradeOfTea.Vietnamese); // 30
+            tea = new Lemon(tea, 2); // 10*2
+            tea = new Syrup(tea, SyrupType.Maple); // 15
+            PrintBeverage(tea);
 
+            Beverage milkshakeLarge = new Milkshake(); // 80
+            milkshakeLarge = new Syrup(milkshakeLarge, SyrupType.Chocolate); // 15
+            PrintBeverage(milkshakeLarge);
 
-            /* Beverage tea = new Tea();
-             PrintBeverage(tea);
-             */
-             Beverage tea1 = new Tea();
-             PrintBeverage(tea1);
+            Beverage milkshakeMedium = new Milkshake(MilkShakeSize.Medium); // 60
+            PrintBeverage(milkshakeMedium);
 
-            Milkshake milkshake1 = new Milkshake();
-            milkshake1 = new Lemon(milkshake1, 2); ;// new Syrup(milkshake1, SyrupType.Chocolate);
-            PrintBeverage(milkshake1);
-
-            Milkshake milkshake2 = new Milkshake(MilkShakeSize.Medium);
-            PrintBeverage(milkshake2);
-
-            Milkshake milkshake3 = new Milkshake(MilkShakeSize.Small);
-            PrintBeverage(milkshake3);
-
-            /*
-             Beverage tea2 = new Tea(GradeOfTea.Japanese);
-             PrintBeverage(tea2);
-
-             Beverage tea3 = new Tea(GradeOfTea.Vietnamese);
-             PrintBeverage(tea3);*/
-
-
-            // распечатать каждый кейс
+            Beverage milkshakeSmall = new Milkshake(MilkShakeSize.Small); // 50
+            PrintBeverage(milkshakeSmall);
         }
 
     }
 }
-
-/*
- Изучив запросы клиентов, было принято увеличить ассортимент предлагаемых напитков:
-    • Ввести стандартную и двойную порцию латте. Двойная порция стоит 130 рублей, стандартная – 90. 
-    • Ввести стандартную (80) и двойную (120р) порции капучино
-
-    • Предлагать покупателям 4 сорта чая (цена не зависит от стоимости). Названия сортов 
-    выберите на свое усмотрение.
-
-    • Предлагать маленькую (50 р), среднюю (60р) и большую (80р) порции молочных коктейлей
-Реализуйте в программе необходимые изменения.
-Размер порции напитка, а также сорт чая влияет на описание напитка.
-     */

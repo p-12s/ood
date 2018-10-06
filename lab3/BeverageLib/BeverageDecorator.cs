@@ -1,77 +1,50 @@
 ﻿namespace BeverageLib
 {
-    public abstract class BeverageDecorator : Beverage
+    public abstract class CondimentDecorator : Beverage
     {
-        protected Beverage beverage;
+        private Beverage _beverage;
 
-        public BeverageDecorator(string name, Beverage beverage) : base(name)
+        public CondimentDecorator(string description, Beverage beverage)
+            : base(description)
         {
-            this.beverage = beverage;
-        }
-    }
-
-    // Размер порции кофе
-    public enum CoffeeSize
-    {
-        Standard,
-	    Double
-    };
-
-    public class Capuccino : BeverageDecorator
-    {
-        private CoffeeSize coffeeSize;
-
-        public Capuccino(Beverage p, CoffeeSize size = CoffeeSize.Standard) : base(p.name + " Capuccino", p)
-        {
-            coffeeSize = size;
+            _beverage = beverage;
         }
 
-        public override int GetCost()
+        public override sealed int GetCost()
         {
-            return beverage.GetCost() + (coffeeSize == CoffeeSize.Standard ? 80 : 120);
-        }
-    }
-
-    public class Latte : BeverageDecorator
-    {
-        private CoffeeSize coffeeSize;
-
-        public Latte(Beverage p, CoffeeSize size = CoffeeSize.Standard) : base(p.name + " Latte", p)
-        {
-            coffeeSize = size;
+            return _beverage.GetCost() + GetCondimentCost();
         }
 
-        public override int GetCost()
-        {
-            return beverage.GetCost() + (coffeeSize == CoffeeSize.Standard ? 90 : 130);
-        }
+        protected abstract int GetCondimentCost();
     }
 
     // Добавка из корицы
-    public class Cinnamon : BeverageDecorator
+    public class Cinnamon : CondimentDecorator
     {
-        public Cinnamon(Beverage p) : base(p.name + ", Cinnamon", p)
+        public Cinnamon(Beverage p)
+            : base(p._description + ", Cinnamon", p)
         {
         }
 
-        public override int GetCost()
+        protected override int GetCondimentCost()
         {
-            return beverage.GetCost() + 20;
+            return 20;
         }
     }
 
     // Лимонная добавка
-    public class Lemon : BeverageDecorator
+    public class Lemon : CondimentDecorator
     {
-        private int quantity;
-        public Lemon(Beverage p, int quant = 1) : base(p.name + ", Lemon x" + quant, p)
+        private int _quantity;
+        public Lemon(Beverage p, int quantity = 1)
+            : base(p._description + ", Lemon x" + quantity, p)
         {
-            quantity = quant;
+            _quantity = quantity;
         }
 
-        public override int GetCost()
+        protected override int GetCondimentCost()
         {
-            return beverage.GetCost() + (10 * quantity);
+            return 10 * _quantity;
         }
     }
 
@@ -82,21 +55,22 @@
     };
 
     // Добавка "Кубики льда". Определяется типом и количеством кубиков, что влияет на стоимость и описание
-    public class IceCubes : BeverageDecorator
+    public class IceCubes : CondimentDecorator
     {
-        private int quantity;
-        private IceCubeType cubeType;
+        private int _quantity;
+        private IceCubeType _cubeType;
 
-        public IceCubes(Beverage p, int quant = 1, IceCubeType type = IceCubeType.Water)
-            : base(p.name + ", " + ((type == IceCubeType.Water) ? "Water " : "Dry ") + "ice cubes x" + quant, p)
+        public IceCubes(Beverage p, int quantity = 1, IceCubeType cubeType = IceCubeType.Water)
+            : base(p._description + ", " + ((cubeType == IceCubeType.Water) ? "Water " : "Dry ")
+                  + "ice cubes x" + quantity, p)
         {
-            quantity = quant;
-            cubeType = type;
+            _quantity = quantity;
+            _cubeType = cubeType;
         }
 
-        public override int GetCost()
+        protected override int GetCondimentCost()
         {
-            return beverage.GetCost() + ((cubeType == IceCubeType.Dry ? 10 : 5) * quantity);
+            return (_cubeType == IceCubeType.Dry ? 10 : 5) * _quantity;
         }
     }
 
@@ -107,54 +81,54 @@
         Maple,		// Кленовый
     }
 
-    public class Syrup : BeverageDecorator
+    public class Syrup : CondimentDecorator
     {
-        private SyrupType syrupType;
+        private SyrupType _syrupType;
 
-        public Syrup(Beverage p, SyrupType type)
-            : base(p.name + ", " + ((type == SyrupType.Chocolate) ? "Chocolate " : "Maple ") +
+        public Syrup(Beverage p, SyrupType syrupType)
+            : base(p._description + ", " + ((syrupType == SyrupType.Chocolate) ? "Chocolate " : "Maple ") +
                   "syrup", p)
         {
-            syrupType = type;
+            _syrupType = syrupType;
         }
 
-        public override int GetCost()
+        protected override int GetCondimentCost()
         {
-            return beverage.GetCost() + 15;
+            return 15;
         }
     }
 
     // Шоколадная крошка
-    public class ChocolateCrumbs : BeverageDecorator
+    public class ChocolateCrumbs : CondimentDecorator
     {
-        private int mass;
+        private int _mass;
 
-        public ChocolateCrumbs(Beverage p, int chocolateMass)
-            : base(p.name + ", Chocolate crumbs " + chocolateMass.ToString() + "g", p)
+        public ChocolateCrumbs(Beverage p, int mass)
+            : base(p._description + ", Chocolate crumbs " + mass.ToString() + "g", p)
         {
-            mass = chocolateMass;
+            _mass = mass;
         }
 
-        public override int GetCost()
+        protected override int GetCondimentCost()
         {
-            return beverage.GetCost() + (2 * mass);
+            return 2 * _mass;
         }
     }
 
     // Кокосовая крошка
-    public class CoconutFlakes : BeverageDecorator
+    public class CoconutFlakes : CondimentDecorator
     {
-        private int mass;
+        private int _mass;
 
-        public CoconutFlakes(Beverage p, int coconutMass)
-            : base(p.name + ", Coconut flakes " + coconutMass.ToString() + "g", p)
+        public CoconutFlakes(Beverage p, int mass)
+            : base(p._description + ", Coconut flakes " + mass.ToString() + "g", p)
         {
-            mass = coconutMass;
+            _mass = mass;
         }
 
-        public override int GetCost()
+        protected override int GetCondimentCost()
         {
-            return beverage.GetCost() + (1 * mass);
+            return 1 * _mass;
         }
     }
 }
