@@ -115,7 +115,7 @@ namespace DocumentEditorLib
     public class ConstDocumentItem
     {
         // Возвращает указатель на константное изображение, либо nullptr, если элемент не является изображением
-        public Image GetImage()
+        public Img GetImage()
         {
             throw new NotImplementedException();
         }
@@ -131,7 +131,7 @@ namespace DocumentEditorLib
     class DocumentItem : ConstDocumentItem
     {
 	    // Возвращает указатель на изображение, либо nullptr, если элемент не является изображением
-	    public Image GetImage() //shared_ptr
+	    public Img GetImage() //shared_ptr
         {
             throw new NotImplementedException();
         }
