@@ -19,12 +19,16 @@ namespace RobotApp
             menu.AddItem("walk", "Robot go out", new List<ICommand>
                 {
                     new WalkCommand(robot, WalkDirection.East),
+                    new WalkCommand(robot, WalkDirection.South),
+                }
+            );
+            menu.AddItem("stop", "Robot stoped", new List<ICommand>
+                {
                     new StopCommand(robot)
                 }
             );
             menu.Run();
-
-            Console.WriteLine("Hello World!");
+            Console.WriteLine("Bye");
         }
     }
 }
