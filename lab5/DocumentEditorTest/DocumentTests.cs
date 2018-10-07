@@ -1,30 +1,56 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using DocumentEditorLib;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace DocumentEditorTest
 {
     [TestClass]
     public class DocumentTests
     {
-        /*
-         Разработайте консольное приложение, позволяющее пользователю создать документ, 
-         содержащий блоки текста и изображений, и сохранить его в HTML-формате.
-        */
-
-        [TestMethod]
-        public void HasTitle()
+        public void AreDocumentsEqual(Document document, string expectedTitle, LinkedList<DocumentItem> expectedList)
         {
-            Document doc = new Document("Super title");
-            Assert.AreEqual(doc.GetTitle(), "Super title");
+            Assert.AreEqual(document.GetTitle(), expectedTitle);
+
+            var items = document.GetDocumentItem();
+            for (var i = 0; i < items.Count; i++)
+            {
+                // проверка только для параграфа
+                var lhs = items.ElementAt(i).GetItem();
+                var rhs = expectedList.ElementAt(i).GetItem();
+
+                Assert.AreEqual(lhs.GetText(), rhs.GetText());
+            }
         }
 
         [TestMethod]
-        public void HasEmptyItemList()
+        public void HasTitleAndItems()
         {
-            Document doc = new Document("Super title");
-            Assert.AreEqual(doc.GetItemsCount(), 0);
+            Document docWithoutTitle = new Document();
+            Assert.AreEqual(docWithoutTitle.GetTitle(), null);
+            Assert.AreEqual(docWithoutTitle.GetDocumentItem().Count, 0);
+
+            Document superDoc = new Document("Super title");
+            Assert.AreEqual(superDoc.GetTitle(), "Super title");
+            Assert.AreEqual(superDoc.GetDocumentItem().Count, 0);
         }
-        
+
+        [TestMethod]
+        public void CanInsertParagraphIntoItemsList()
+        {
+            var expectedList = new LinkedList<DocumentItem>();
+            Document doc = new Document("Hello");
+            Assert.AreEqual(doc.GetDocumentItem().Count, expectedList.Count);
+
+            doc.InsertItem(new DocumentItem(new Paragraph("Hi, I'm first paragraph!")));
+            expectedList.AddLast(new DocumentItem(new Paragraph("Hi, I'm first paragraph!")));
+            AreDocumentsEqual(doc, "Hello", expectedList);
+
+            doc.InsertItem(new DocumentItem(new Paragraph("Ok, I'm second")));
+            expectedList.AddLast(new DocumentItem(new Paragraph("Ok, I'm second")));
+            AreDocumentsEqual(doc, "Hello", expectedList);
+        }
+
 
 
 

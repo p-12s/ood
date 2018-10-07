@@ -10,6 +10,11 @@
     {
         private string _text;
 
+        public Paragraph(string text = null)
+        {
+            _text = text;
+        }
+
         public string GetText()
         {
             return _text;

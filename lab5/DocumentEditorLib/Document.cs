@@ -3,39 +3,54 @@ using System.Collections.Generic;
 
 namespace DocumentEditorLib
 {
-    /* Интерфес документа */
+    // как тут добавить картинки по красоте?
+    public class DocumentItem
+    {
+        private Paragraph _paragraph;
+
+        public DocumentItem(Paragraph paragraph)
+        {
+            _paragraph = paragraph;
+        }
+
+        public Paragraph GetItem()
+        {
+            return _paragraph;
+        }
+    };
+
+    /* Интерфейс документа */
     public interface IDocument
     {
-        List<IParagraph> InsertParagraph(string text, int? position = null);
+        string GetTitle();
 
-        int GetItemsCount();
+        void SetTitle(string title);
 
-        // Доступ к элементам изображения
-        ConstDocumentItem GetItem(int index);
-        //DocumentItem GetItem(int index);
+        LinkedList<DocumentItem> GetDocumentItem();
+
+        void InsertItem(DocumentItem documentItem, int? position = null);
+
+        /*
+        void InsertImage(Img img);
+
+        T GetItem(int index);
 
         void DeleteItem(int index);
 
-        string GetTitle();
-
-        void SetTitle(string title); // ref?
-
-	    // Сообщает о доступности операции Undo
+        void InsertParagraph(Paragraph paragraph);
+        
         bool CanUndo();
 
-        // Отменяет команду редактирования
         void Undo();
 
-        // Сообщает о доступности операции Redo
         bool CanRedo();
 
-        // Выполняет отмененную команду редактирования
         void Redo();
 
         // Сохраняет документ в формате html. Изображения сохраняются в подкаталог images
         // пути к изображениям указываются относительно пути к сохраняемому HTML файлу
         void Save(string path);
-
+        */
     }
 
     public class Document : IDocument
@@ -60,25 +75,36 @@ namespace DocumentEditorLib
             _title = title;
         }
 
-        public int GetItemsCount()
+        public LinkedList<DocumentItem> GetDocumentItem()
         {
-            return _items.Count;
+            return _items;
         }
 
-        public List<IParagraph> InsertParagraph(string text, int? position = null)
+        public void InsertItem(DocumentItem documentItem, int? position = null)
         {
+            if (position == null)
+                _items.AddLast(documentItem);
+
+
+        }
+
+        /*void InsertParagraph(Paragraph paragraph)
+        {
+            //Paragraph paragraph = new Paragraph(text);
             throw new NotImplementedException();
         }
 
-        public ConstDocumentItem GetItem(int index)
+        void InsertImage(Img img)
+        {
+            //Paragraph paragraph = new Paragraph(text);
+            throw new NotImplementedException();
+        }
+
+
+        public DocumentItem<T> GetItem(int index)
         {
             throw new NotImplementedException();
         }
-        /*
-        public DocumentItem GetItem(int index)
-        {
-            throw new NotImplementedException();
-        }*/
 
         public void DeleteItem(int index)
         {
@@ -108,40 +134,7 @@ namespace DocumentEditorLib
         public void Save(string path)
         {
             throw new NotImplementedException();
-        }
+        }*/
     }
-
-    /* Неизменяемый элемент документа */
-    public class ConstDocumentItem
-    {
-        // Возвращает указатель на константное изображение, либо nullptr, если элемент не является изображением
-        public Img GetImage()
-        {
-            throw new NotImplementedException();
-        }
-
-        // Возвращает указатель на константный параграф, либо nullptr, если элемент не является параграфом
-        public Paragraph GetParagraph()
-        {
-            throw new NotImplementedException();
-        }
-    };
-
-    /* Элемент документа. Позволяет получить доступ к изображению или параграфу */
-    class DocumentItem : ConstDocumentItem
-    {
-	    // Возвращает указатель на изображение, либо nullptr, если элемент не является изображением
-	    public Img GetImage() //shared_ptr
-        {
-            throw new NotImplementedException();
-        }
-
-        // Возвращает указатель на параграф, либо nullptr, если элемент не является параграфом
-        public Paragraph GetParagraph()
-        {
-            throw new NotImplementedException();
-        }
-
-    };
 
 }
