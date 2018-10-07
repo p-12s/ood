@@ -1,7 +1,6 @@
 ﻿using System.IO;
 using System;
 using System.Drawing;
-using System.Linq;
 
 namespace DocumentEditorLib
 {
@@ -65,7 +64,7 @@ namespace DocumentEditorLib
         {
             if (width < 0 || width > 10000 || height < 0 | height > 10000)
             {
-                Console.WriteLine("Error! Cannot set size less than 0 or greater than 10,000");
+                Console.WriteLine("Error! Cannot set size less than 0 or greater than 10.000");
             }
             else
             {
