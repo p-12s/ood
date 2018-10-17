@@ -4,7 +4,7 @@ using System.Drawing;
 
 namespace DocumentEditorLib
 {
-    public interface IImg
+    public interface IImg // реализация (отношение "реализовывает")
     {
         string GetPath();
 
