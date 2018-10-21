@@ -29,12 +29,6 @@ namespace DocumentEditorLib
 
         public void Execute()
         {
-            /*
-            ▪ Title: Это заголовок документа
-            ▪ 0. Paragraph: Это самый первый параграф
-            ▪ 1. Image: 400 300 images/img1.png
-            ▪ 2. Paragraph: Это параграф, идущий следом за изображением.
-             */
             Console.WriteLine("Title: " + _document.GetTitle());
             int i = 1;
             foreach(var item in _document.GetDocumentItems())
@@ -46,7 +40,28 @@ namespace DocumentEditorLib
 
         public void Unexecute()
         {
-            Console.WriteLine("Unexecute List");
+        }
+    };
+
+    public class SetTitle : ICommand
+    {
+        private Document _document;
+        private string _title;
+
+        public SetTitle(Document document, string title)
+        {
+            _document = document;
+            _title = title;
+        }
+
+        public void Execute()
+        {
+            _document.SetTitle(_title);
+        }
+
+        public void Unexecute()
+        {
+            Console.WriteLine("Unexecute SetTitle");
         }
     };
 
@@ -54,20 +69,23 @@ namespace DocumentEditorLib
     {
         private Document _document;
         private string _text;
+        private string _previousText;
         private int _position;
 
+        // делаем еще и инвертированную команду
+        // причем каждый экземпляр будет содержать разные значения
         public InsertParagraph(Document document, string text, int? position = null)
         {
-            // TODO документ не должен нулл
             _document = document;
             _text = text;
 
             _position = position ?? (_document.GetDocumentItems().Count - 1);
+            _previousText = document.;// предыдущий текст в изменяемой позиции закидываю в отменение операции
         }
 
         public void Execute()
         {
-            _document.InsertParagraph(_text, _position);
+            _document.InsertParagraph(_text, _position);//
         }
 
         public void Unexecute()
@@ -96,6 +114,46 @@ namespace DocumentEditorLib
         {
             Console.WriteLine("Unexecute DeleteItem");
             //_document.DeleteItem(_index);//снимает отметку
+        }
+    };
+
+    public class Undo : ICommand
+    {
+        private Document _document;
+
+        public Undo(Document document)
+        {
+            _document = document;
+        }
+
+        public void Execute()
+        {
+            _document.Undo();
+        }
+
+        public void Unexecute()
+        {
+            Console.WriteLine("Unexecute Undo");
+        }
+    };
+
+    public class Redo : ICommand
+    {
+        private Document _document;
+
+        public Redo(Document document)
+        {
+            _document = document;
+        }
+
+        public void Execute()
+        {
+            _document.Redo();
+        }
+
+        public void Unexecute()
+        {
+            Console.WriteLine("Unexecute Redo");
         }
     };
 }

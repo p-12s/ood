@@ -22,27 +22,27 @@ namespace DocumentEditorTest
         [TestInitialize()]
         public void TestInitialize()
         {
-            _10SameCommandsHistory.AddAndExecuteCommand(new InsertParagraph(_document, "1"));
-            _10SameCommandsHistory.AddAndExecuteCommand(new InsertParagraph(_document, "2"));
-            _10SameCommandsHistory.AddAndExecuteCommand(new InsertParagraph(_document, "3"));
-            _10SameCommandsHistory.AddAndExecuteCommand(new InsertParagraph(_document, "4"));
-            _10SameCommandsHistory.AddAndExecuteCommand(new InsertParagraph(_document, "5"));
-            _10SameCommandsHistory.AddAndExecuteCommand(new InsertParagraph(_document, "6"));
-            _10SameCommandsHistory.AddAndExecuteCommand(new InsertParagraph(_document, "7"));
-            _10SameCommandsHistory.AddAndExecuteCommand(new InsertParagraph(_document, "8"));
-            _10SameCommandsHistory.AddAndExecuteCommand(new InsertParagraph(_document, "9"));
-            _10SameCommandsHistory.AddAndExecuteCommand(new InsertParagraph(_document, "10"));
+            _10SameCommandsHistory.AddCommand(new InsertParagraph(_document, "1"));
+            _10SameCommandsHistory.AddCommand(new InsertParagraph(_document, "2"));
+            _10SameCommandsHistory.AddCommand(new InsertParagraph(_document, "3"));
+            _10SameCommandsHistory.AddCommand(new InsertParagraph(_document, "4"));
+            _10SameCommandsHistory.AddCommand(new InsertParagraph(_document, "5"));
+            _10SameCommandsHistory.AddCommand(new InsertParagraph(_document, "6"));
+            _10SameCommandsHistory.AddCommand(new InsertParagraph(_document, "7"));
+            _10SameCommandsHistory.AddCommand(new InsertParagraph(_document, "8"));
+            _10SameCommandsHistory.AddCommand(new InsertParagraph(_document, "9"));
+            _10SameCommandsHistory.AddCommand(new InsertParagraph(_document, "10"));
 
-            _5SameCommandsHistory.AddAndExecuteCommand(new InsertParagraph(_document, "1"));
-            _5SameCommandsHistory.AddAndExecuteCommand(new InsertParagraph(_document, "2"));
-            _5SameCommandsHistory.AddAndExecuteCommand(new InsertParagraph(_document, "3"));
-            _5SameCommandsHistory.AddAndExecuteCommand(new InsertParagraph(_document, "4"));
-            _5SameCommandsHistory.AddAndExecuteCommand(new InsertParagraph(_document, "5"));
-            _5SameCommandsHistory.AddAndExecuteCommand(new InsertParagraph(_document, "6"));
-            _5SameCommandsHistory.AddAndExecuteCommand(new InsertParagraph(_document, "7"));
-            _5SameCommandsHistory.AddAndExecuteCommand(new InsertParagraph(_document, "8"));
-            _5SameCommandsHistory.AddAndExecuteCommand(new InsertParagraph(_document, "9"));
-            _5SameCommandsHistory.AddAndExecuteCommand(new InsertParagraph(_document, "10"));
+            _5SameCommandsHistory.AddCommand(new InsertParagraph(_document, "1"));
+            _5SameCommandsHistory.AddCommand(new InsertParagraph(_document, "2"));
+            _5SameCommandsHistory.AddCommand(new InsertParagraph(_document, "3"));
+            _5SameCommandsHistory.AddCommand(new InsertParagraph(_document, "4"));
+            _5SameCommandsHistory.AddCommand(new InsertParagraph(_document, "5"));
+            _5SameCommandsHistory.AddCommand(new InsertParagraph(_document, "6"));
+            _5SameCommandsHistory.AddCommand(new InsertParagraph(_document, "7"));
+            _5SameCommandsHistory.AddCommand(new InsertParagraph(_document, "8"));
+            _5SameCommandsHistory.AddCommand(new InsertParagraph(_document, "9"));
+            _5SameCommandsHistory.AddCommand(new InsertParagraph(_document, "10"));
         }
 
         [TestMethod()]
@@ -72,8 +72,8 @@ namespace DocumentEditorTest
         [TestMethod]
         public void CanCancelNoMoreThanLast10Comands()
         {
-            _10SameCommandsHistory.AddAndExecuteCommand(new InsertParagraph(_document, "11"));
-            _10SameCommandsHistory.AddAndExecuteCommand(new InsertParagraph(_document, "12"));
+            _10SameCommandsHistory.AddCommand(new InsertParagraph(_document, "11"));
+            _10SameCommandsHistory.AddCommand(new InsertParagraph(_document, "12"));
 
             _10SameCommandsHistory.Undo();
             _10SameCommandsHistory.Undo();
@@ -101,7 +101,7 @@ namespace DocumentEditorTest
         }
 
         [TestMethod]
-        public void rewritedHistoryIsCleared()
+        public void RewritedHistoryIsCleared()
         {
             _10SameCommandsHistory.Undo();
             _10SameCommandsHistory.Undo();
@@ -109,7 +109,7 @@ namespace DocumentEditorTest
             _10SameCommandsHistory.Undo();
             _10SameCommandsHistory.Undo();
             Assert.IsTrue(_10SameCommandsHistory.CanRedo());
-            _10SameCommandsHistory.AddAndExecuteCommand(new InsertParagraph(_document, "6-new"));
+            _10SameCommandsHistory.AddCommand(new InsertParagraph(_document, "6-new"));
             Assert.IsFalse(_10SameCommandsHistory.CanRedo());
         }
     }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace DocumentEditorLib
 {
@@ -28,24 +29,20 @@ namespace DocumentEditorLib
 
         LinkedList<DocumentItem> GetDocumentItems();
 
-        void InsertItem(DocumentItem documentItem, int? position = null);
+        //void InsertItem(DocumentItem documentItem, int? position = null);
 
         void InsertParagraph(string text, int? position = null);
 
         void DeleteItem(int index);
 
+        void Undo();
+
+        void Redo();
+
         /*
         void InsertImage(Img img);
 
         T GetItem(int index);
-        
-        bool CanUndo();
-
-        void Undo();
-
-        bool CanRedo();
-
-        void Redo();
 
         // Сохраняет документ в формате html. Изображения сохраняются в подкаталог images
         // пути к изображениям указываются относительно пути к сохраняемому HTML файлу
@@ -57,9 +54,7 @@ namespace DocumentEditorLib
     {
         private string _title;
         private LinkedList<DocumentItem> _items;
-
-        // хранение истории. для простоты пусть помнит все
-        private List<ICommand> _commandHistory;
+        private History _history;
 
 
         public Document(string title = null)
@@ -67,16 +62,18 @@ namespace DocumentEditorLib
             if (!string.IsNullOrEmpty(title))
                 _title = title;
             _items = new LinkedList<DocumentItem>();
+            _history = new History();
         }
 
         public string GetTitle()
         {
-            return _title ?? "-";
+            return _title;
         }
 
         public void SetTitle(string title)
         {
             _title = title;
+            _history.AddCommand(new SetTitle(this, title));
         }
 
         public LinkedList<DocumentItem> GetDocumentItems()
@@ -84,21 +81,19 @@ namespace DocumentEditorLib
             return _items;
         }
 
-        public void InsertItem(DocumentItem documentItem, int? position = null)
+        /*public void InsertItem(DocumentItem documentItem, int? position = null)
         {
             if (position == null)
                 _items.AddLast(documentItem);
-        }
+        }*/
 
-        // Вставляет параграф текста в указанную позицию (сдвигая последующие элементы)
-        // Если параметр position не указан, вставка происходит в конец документа
-        // InsertParagraph <позиция>|end <текст параграфа>
         public void InsertParagraph(string text, int? position = null)
         {
             if (position > _items.Count)
             {
                 Console.WriteLine("Position {0} does not exist, enter from 0 to {1}", position, (_items.Count - 1));
             }
+
             DocumentItem item = new DocumentItem(new Paragraph(text));
             if (position == null)
             {
@@ -108,11 +103,44 @@ namespace DocumentEditorLib
             {
                 _items.AddLast(item);//так-то надо по индексу вставлять, пока пойдет
             }
+
+            _history.AddCommand(new InsertParagraph(this, text));
         }
 
         public void DeleteItem(int index)//лучше использовать массив, а не LinkedList
         {
             _items.RemoveLast();
+        }
+
+        public void Undo()
+        {
+            if (_history.CanUndo())
+            {
+                _history.Undo();
+                
+            }
+            else
+            {
+                Console.WriteLine("Операция отмены не может быть выполнена");
+            }
+
+        }
+
+        public void Redo()
+        {
+            if (_history.CanRedo())
+                _history.Redo();
+            else
+                Console.WriteLine("Операция возврата не может быть выполнена");
+        }
+
+        public DocumentItem GetItem(int index) // может сделать приватным? извне он не нужен
+        {
+            if (index <= (_items.Count - 1))
+            {
+                return _items.ElementAt(index);
+            }
+            return null;
         }
 
         /*
@@ -123,30 +151,7 @@ namespace DocumentEditorLib
         }
 
 
-        public DocumentItem<T> GetItem(int index)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool CanUndo()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Undo()
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool CanRedo()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Redo()
-        {
-            throw new NotImplementedException();
-        }
+        
 
         public void Save(string path)
         {
