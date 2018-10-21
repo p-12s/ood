@@ -6,7 +6,7 @@ namespace DocumentEditorTest
     [TestClass]
     public class ParagraphTests
     {
-        [TestMethod]
+        [TestMethod()]
         public void HasText()
         {
             Paragraph p = new Paragraph();

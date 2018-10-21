@@ -5,11 +5,15 @@ namespace DocumentEditorLib
     public interface ICommand
     {
         void Execute();
+        void Unexecute();
     }
 
     public class Help : ICommand
     {
-        public void Execute()
+        public void Execute() // может не стоит там перехватывать
+        {
+        }
+        public void Unexecute()
         {
         }
     };
@@ -39,6 +43,11 @@ namespace DocumentEditorLib
                 ++i;
             }
         }
+
+        public void Unexecute()
+        {
+            Console.WriteLine("Unexecute List");
+        }
     };
 
     public class InsertParagraph : ICommand
@@ -49,6 +58,7 @@ namespace DocumentEditorLib
 
         public InsertParagraph(Document document, string text, int? position = null)
         {
+            // TODO документ не должен нулл
             _document = document;
             _text = text;
 
@@ -58,6 +68,11 @@ namespace DocumentEditorLib
         public void Execute()
         {
             _document.InsertParagraph(_text, _position);
+        }
+
+        public void Unexecute()
+        {
+            Console.WriteLine("Unexecute InsertParagraph");
         }
     };
 
@@ -79,7 +94,8 @@ namespace DocumentEditorLib
 
         public void Unexecute()
         {
-            _document.DeleteItem(_index);//снимает отметку
+            Console.WriteLine("Unexecute DeleteItem");
+            //_document.DeleteItem(_index);//снимает отметку
         }
     };
 }
