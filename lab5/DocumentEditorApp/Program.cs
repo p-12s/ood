@@ -34,6 +34,18 @@ namespace DocumentEditorApp
                     new List(doc)
                 }
             );
+            menu.AddItem("InsertParagraph", "Inserts a paragraph with the specified text into the specified document position. \nAs the insert position, you must specify the sequence number of the block. \nIf the position is not specified, the insertion will occur at the end",
+                new List<ICommand>
+                {
+                    new InsertParagraph(doc, "str")   //как сюда передавать строку и число?
+                }
+            );
+            menu.AddItem("DeleteItem", "Deletes the document element in the specified position.",
+                new List<ICommand>
+                {
+                    new DeleteItem(doc, 1)
+                }
+            );
 
             menu.Run();
 

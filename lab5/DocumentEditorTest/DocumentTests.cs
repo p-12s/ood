@@ -12,7 +12,7 @@ namespace DocumentEditorTest
         {
             Assert.AreEqual(document.GetTitle(), expectedTitle);
 
-            var items = document.GetDocumentItem();
+            var items = document.GetDocumentItems();
             for (var i = 0; i < items.Count; i++)
             {
                 // проверка только для параграфа
@@ -28,11 +28,11 @@ namespace DocumentEditorTest
         {
             Document docWithoutTitle = new Document();
             Assert.AreEqual(docWithoutTitle.GetTitle(), null);
-            Assert.AreEqual(docWithoutTitle.GetDocumentItem().Count, 0);
+            Assert.AreEqual(docWithoutTitle.GetDocumentItems().Count, 0);
 
             Document superDoc = new Document("Super title");
             Assert.AreEqual(superDoc.GetTitle(), "Super title");
-            Assert.AreEqual(superDoc.GetDocumentItem().Count, 0);
+            Assert.AreEqual(superDoc.GetDocumentItems().Count, 0);
         }
 
         [TestMethod]
@@ -40,7 +40,7 @@ namespace DocumentEditorTest
         {
             var expectedList = new LinkedList<DocumentItem>();
             Document doc = new Document("Hello");
-            Assert.AreEqual(doc.GetDocumentItem().Count, expectedList.Count);
+            Assert.AreEqual(doc.GetDocumentItems().Count, expectedList.Count);
 
             doc.InsertItem(new DocumentItem(new Paragraph("Hi, I'm first paragraph!")));
             expectedList.AddLast(new DocumentItem(new Paragraph("Hi, I'm first paragraph!")));

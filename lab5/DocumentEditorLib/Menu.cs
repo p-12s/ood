@@ -24,7 +24,7 @@ namespace DocumentEditorLib
         {
             _exit = false;
 
-            if (_items.ContainsKey(command))//command-Help
+            if (_items.ContainsKey(command))//InsertParagraph (пока без строки и позиции)
             {
                 if (command == "Help")
                 {
@@ -74,7 +74,7 @@ namespace DocumentEditorLib
             Console.WriteLine("Commands list:");
             foreach (var item in _items)
             {
-                Console.WriteLine(item.Key + ": " + item.Value._description);
+                Console.WriteLine("\n" + item.Key + ": " + item.Value._description);
             }
         }
 

@@ -26,18 +26,18 @@ namespace DocumentEditorLib
 
         void SetTitle(string title);
 
-        LinkedList<DocumentItem> GetDocumentItem();
+        LinkedList<DocumentItem> GetDocumentItems();
 
         void InsertItem(DocumentItem documentItem, int? position = null);
+
+        void InsertParagraph(string text, int? position = null);
+
+        void DeleteItem(int index);
 
         /*
         void InsertImage(Img img);
 
         T GetItem(int index);
-
-        void DeleteItem(int index);
-
-        void InsertParagraph(Paragraph paragraph);
         
         bool CanUndo();
 
@@ -58,6 +58,10 @@ namespace DocumentEditorLib
         private string _title;
         private LinkedList<DocumentItem> _items;
 
+        // хранение истории. для простоты пусть помнит все
+        private List<ICommand> _commandHistory;
+
+
         public Document(string title = null)
         {
             if (!string.IsNullOrEmpty(title))
@@ -67,7 +71,7 @@ namespace DocumentEditorLib
 
         public string GetTitle()
         {
-            return _title;
+            return _title ?? "-";
         }
 
         public void SetTitle(string title)
@@ -75,7 +79,7 @@ namespace DocumentEditorLib
             _title = title;
         }
 
-        public LinkedList<DocumentItem> GetDocumentItem()
+        public LinkedList<DocumentItem> GetDocumentItems()
         {
             return _items;
         }
@@ -84,16 +88,34 @@ namespace DocumentEditorLib
         {
             if (position == null)
                 _items.AddLast(documentItem);
-
-
         }
 
-        /*void InsertParagraph(Paragraph paragraph)
+        // Вставляет параграф текста в указанную позицию (сдвигая последующие элементы)
+        // Если параметр position не указан, вставка происходит в конец документа
+        // InsertParagraph <позиция>|end <текст параграфа>
+        public void InsertParagraph(string text, int? position = null)
         {
-            //Paragraph paragraph = new Paragraph(text);
-            throw new NotImplementedException();
+            if (position > _items.Count)
+            {
+                Console.WriteLine("Position {0} does not exist, enter from 0 to {1}", position, (_items.Count - 1));
+            }
+            DocumentItem item = new DocumentItem(new Paragraph(text));
+            if (position == null)
+            {
+                _items.AddLast(item);
+            }
+            else
+            {
+                _items.AddLast(item);//так-то надо по индексу вставлять, пока пойдет
+            }
         }
 
+        public void DeleteItem(int index)//лучше использовать массив, а не LinkedList
+        {
+            _items.RemoveLast();
+        }
+
+        /*
         void InsertImage(Img img)
         {
             //Paragraph paragraph = new Paragraph(text);
@@ -105,11 +127,6 @@ namespace DocumentEditorLib
         {
             throw new NotImplementedException();
         }
-
-        public void DeleteItem(int index)
-        {
-            throw new NotImplementedException();
-        }        
 
         public bool CanUndo()
         {
