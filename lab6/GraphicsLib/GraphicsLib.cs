@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 
 // Пространство имен графической библиотеки (недоступно для изменения)
 namespace GraphicsLib
@@ -33,12 +34,18 @@ namespace ShapeDrawingLib
 {
     public struct Point
     {
-        public int x;
-        public int y;
+        public int X;
+        public int Y;
+
+        public Point(int x, int y)
+        {
+            X = x;
+            Y = y;
+        }
     };
 
     // Интерфейс объектов, которые могут быть нарисованы на холсте из GraphicsLib
-    interface ICanvasDrawable
+    public interface ICanvasDrawable
     {
         void Draw(GraphicsLib.ICanvas canvas);
     };
@@ -82,7 +89,7 @@ namespace ShapeDrawingLib
     };
 
     // Художник, способный рисовать ICanvasDrawable-объекты на ICanvas
-    class CanvasPainter
+    public class CanvasPainter
     {
         //private:
 	    // TODO: дописать приватную часть
@@ -104,65 +111,63 @@ namespace ModernGraphicsLib
 {
     public class Point
     {
-        private int _x, _y;
+        public int X { get; set; }
+        public int Y { get; set; }
 
         public Point(int x, int y)
         {
-            _x = x;
-            _y = y;
+            X = x;
+            Y = y;
         }
     };
 
     // Класс для современного рисования графики
-    class ModernGraphicsRenderer
+    public class ModernGraphicsRenderer
     {
-        public ModernGraphicsRenderer(ostream & strm) : m_out(strm)
+        //private Stream _out; для простоты выводим к консоль
+        private bool _drawing;
+
+        public ModernGraphicsRenderer()
         {
+            _drawing = false;
         }
 
-        /*~CModernGraphicsRenderer() как это будет у меня?
+        ~ModernGraphicsRenderer()
         {
-            if (m_drawing) // Завершаем рисование, если оно было начато
-            {
+            if (_drawing) // Завершаем рисование, если оно было начато
                 EndDraw();
-            }
-        }*/
+        }
 
         // Этот метод должен быть вызван в начале рисования
-        void BeginDraw()
+        public void BeginDraw()
         {
-            if (m_drawing)
-            {
-                throw logic_error("Drawing has already begun");
-            }
-            m_out << "<draw>" << endl;
-            m_drawing = true;
+            if (_drawing)
+                throw new InvalidOperationException("Drawing has already begun");
+
+            Console.WriteLine("<draw>");
+            _drawing = true;
         }
 
         // Выполняет рисование линии
-        public void DrawLine(const CPoint & start, const CPoint & end)
+        public void DrawLine(Point start, Point end)
 	    {
-		    if (!m_drawing)
-		    {
-			    throw logic_error("DrawLine is allowed between BeginDraw()/EndDraw() only");
-            }
-            m_out << boost::format(R"(  <line fromX="%1%" fromY="%2" toX="%3%" toY="%4%"/>)") << endl;
-	    }
+		    if (!_drawing)
+                throw new InvalidOperationException("DrawLine is allowed between BeginDraw()/EndDraw() only");
 
-// Этот метод должен быть вызван в конце рисования
-void EndDraw()
-{
-    if (!m_drawing)
-    {
-        throw logic_error("Drawing has not been started");
-    }
-    m_out << "</draw>" << endl;
-    m_drawing = false;
-}
-private:
-	ostream & m_out;
-	bool m_drawing = false;
-};
+            Console.WriteLine("(<line from X=\"{0}\" from Y=\"{1}\" to X=\"{2}\" to Y=\"{3}\"/>)", start.X, start.Y, end.X, end.Y);
+        }
+
+        // Этот метод должен быть вызван в конце рисования
+        void EndDraw()
+        {
+            if (!_drawing)
+                throw new InvalidOperationException("Drawing has not been started");
+
+            Console.WriteLine("</draw>");
+            _drawing = false;
+        }
+
+    };
 }
 
 
@@ -170,140 +175,142 @@ private:
 /////////////
 ///
 // Пространство имен приложения (доступно для модификации)
-namespace app
+namespace App
 {
-    void PaintPicture(shape_drawing_lib::CCanvasPainter & painter)
+    public void PaintPicture(ShapeDrawingLib.CanvasPainter painter)
     {
-        using namespace shape_drawing_lib;
+        //using ShapeDrawingLib;
 
-	CTriangle triangle({ 10, 15 }, { 100, 200 }, { 150, 250 });
-	CRectangle rectangle({ 30, 40 }, 18, 24);
+        new ShapeDrawingLib.Triangle(
+            new ShapeDrawingLib.Point(10, 15),
+            new ShapeDrawingLib.Point(100, 200),
+            new ShapeDrawingLib.Point(150, 250)
+            );
 
-	// TODO: нарисовать прямоугольник и треугольник при помощи painter
+        new ShapeDrawingLib.Rectangle(
+            new ShapeDrawingLib.Point(10, 15),
+            18, 24);
+
+        // TODO: нарисовать прямоугольник и треугольник при помощи painter
+    }
+
+    void PaintPictureOnCanvas()
+    {
+        GraphicsLib.Canvas simpleCanvas;
+        ShapeDrawingLib.CanvasPainter painter(simpleCanvas);
+        PaintPicture(painter);
+    }
+
+    void PaintPictureOnModernGraphicsRenderer()
+    {
+        ModernGraphicsLib.ModernGraphicsRenderer renderer();//рисуем в консоль, убрал cout
+        //(void)&renderer; // устраняем предупреждение о неиспользуемой переменной
+
+        // TODO: при помощи существующей функции PaintPicture() нарисовать
+        // картину на renderer
+        // Подсказка: используйте паттерн "Адаптер"
+    }
 }
 
-void PaintPictureOnCanvas()
-{
-    graphics_lib::CCanvas simpleCanvas;
-    shape_drawing_lib::CCanvasPainter painter(simpleCanvas);
-    PaintPicture(painter);
-}
-
-void PaintPictureOnModernGraphicsRenderer()
-{
-    modern_graphics_lib::CModernGraphicsRenderer renderer(cout);
-    (void)&renderer; // устраняем предупреждение о неиспользуемой переменной
-
-    // TODO: при помощи существующей функции PaintPicture() нарисовать
-    // картину на renderer
-    // Подсказка: используйте паттерн "Адаптер"
-}
-}
-
-namespace graphics_lib_pro
+namespace GraphicsLibPro
 {
     // Холст для рисования
-    class ICanvas
+    public interface ICanvas
     {
-        public:
-	// Установка цвета в формате 0xRRGGBB
-	virtual void SetColor(uint32_t rgbColor) = 0;
-	virtual void MoveTo(int x, int y) = 0;
-	virtual void LineTo(int x, int y) = 0;
-	virtual ~ICanvas() = default;
-};
+	    // Установка цвета в формате 0xRRGGBB
+	    void SetColor(uint rgbColor);
+	    void MoveTo(int x, int y);
+	    void LineTo(int x, int y);
+    };
 
     // Реализация холста для рисования
-    class CCanvas : public ICanvas
-{
-public:
-	void SetColor(uint32_t rgbColor) override
-	{
-		// TODO: вывести в output цвет в виде строки SetColor (#RRGGBB)
-	}
-void MoveTo(int x, int y) override
-	{
-		// Реализация остается без изменения
-	}
-	void LineTo(int x, int y) override
-	{
-		// Реализация остается без изменения
-	}
-};
+    class Canvas : ICanvas
+    {
+
+        public void SetColor(uint rgbColor) // опуть тут override - как заменить?
+        {
+	        // TODO: вывести в output цвет в виде строки SetColor (#RRGGBB)
+        }
+
+        public void MoveTo(int x, int y)
+        {
+	        // Реализация остается без изменения
+        }
+
+        public void LineTo(int x, int y)
+        {
+	        // Реализация остается без изменения
+        }
+    };
 }
 
 // Пространство имен обновленной современной графической библиотеки (недоступно для изменения)
-namespace modern_graphics_lib_pro
+namespace ModernGraphicsLibPro
 {
-    class CPoint
+    public class Point
     {
-        public:
-	CPoint(int x, int y) :x(x), y(y) { }
+        public int X { get; set; }
+        public int Y { get; set; }
 
-        int x;
-        int y;
+        public Point(int x, int y)
+        {
+            X = x;
+            Y = y;
+        }
     };
 
     // Цвет в формате RGBA, каждый компонент принимает значения от 0.0f до 1.0f
-    class CRGBAColor
+    class RGBAColor
     {
-        public:
-	CRGBAColor(float r, float g, float b, float a) :r(r), g(g), b(b), a(a) { }
-        float r, g, b, a;
+        public float R { get; set; }
+        public float G { get; set; }
+        public float B { get; set; }
+        public float A { get; set; }
+
+        public RGBAColor(float r, float g, float b, float a)
+        {
+            R = r;
+            G = g;
+            B = b;
+            A = a;
+        }
     };
 
     // Класс для современного рисования графики
-    class CModernGraphicsRenderer
+    class ModernGraphicsRenderer
     {
-        public:
-	CModernGraphicsRenderer(ostream & strm) : m_out(strm)
+        private bool _drawing;
+
+        public ModernGraphicsRenderer()
         {
+            _drawing = false;
         }
 
-        ~CModernGraphicsRenderer()
+        ~ModernGraphicsRenderer() // возможно не нужен
         {
             // Реализация остается без изменения
         }
 
         // Этот метод должен быть вызван в начале рисования
-        void BeginDraw()
+        public void BeginDraw() // TODO вспомогательное сделать приватным
         {
             // Реализация остается без изменения
         }
 
         // Выполняет рисование линии
-        void DrawLine(const CPoint & start, const CPoint & end, const CRGBAColor& color)
-	{
-		// TODO: выводит в output инструкцию для рисования линии в виде
-		// <line fromX="3" fromY="5" toX="5" toY="17">
-		//   <color r="0.35" g="0.47" b="1.0" a="1.0" />
-		// </line>
-		// Можно вызывать только между BeginDraw() и EndDraw()
-	}
+        public void DrawLine(Point start, Point end, RGBAColor color)
+	    {
+		    // TODO: выводит в output инструкцию для рисования линии в виде
+		    // <line fromX="3" fromY="5" toX="5" toY="17">
+		    //   <color r="0.35" g="0.47" b="1.0" a="1.0" />
+		    // </line>
+		    // Можно вызывать только между BeginDraw() и EndDraw()
+	    }
 
-	// Этот метод должен быть вызван в конце рисования
-	void EndDraw()
+	    // Этот метод должен быть вызван в конце рисования
+	    void EndDraw()
         {
             // Реализация остается без изменения
-        }
-        private:
-	ostream & m_out;
-	bool m_drawing = false;
+        }	
     };
-}
-
-int main()
-{
-    cout << "Should we use new API (y)?";
-    string userInput;
-    if (getline(cin, userInput) && (userInput == "y" || userInput == "Y"))
-    {
-        app::PaintPictureOnModernGraphicsRenderer();
-    }
-    else
-    {
-        app::PaintPictureOnCanvas();
-    }
-
-    return 0;
 }
