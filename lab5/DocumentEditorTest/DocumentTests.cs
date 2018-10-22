@@ -100,46 +100,214 @@ namespace DocumentEditorTest
                 new List<string> { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" });
         }
 
-        // отменить с эффектом стирания истории
         [TestMethod]
-        public void CanUndoAdditionOfParagraph()
+        public void CanUndo10LastParagraphInsertion()
         {
             _10ParagraphsDocument.InsertParagraph("11");
             _10ParagraphsDocument.InsertParagraph("12");
             _10ParagraphsDocument.InsertParagraph("13");
 
-
             AreDocumentTitleAndParagraphsEqual(_10ParagraphsDocument, null,
                 new List<string> { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13" });
 
-            var c = _10ParagraphsDocument;
+            _10ParagraphsDocument.Undo();
+            AreDocumentTitleAndParagraphsEqual(_10ParagraphsDocument, null,
+                new List<string> { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12" });
 
-            _10ParagraphsDocument.Undo(); // теперь проверить, что знчение парагр изменилось
+            _10ParagraphsDocument.Undo();
+            AreDocumentTitleAndParagraphsEqual(_10ParagraphsDocument, null,
+                new List<string> { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11" });
 
-            var a = _10ParagraphsDocument;
+            _10ParagraphsDocument.Undo();
+            AreDocumentTitleAndParagraphsEqual(_10ParagraphsDocument, null,
+                new List<string> { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"});
+
+            _10ParagraphsDocument.Undo();
+            AreDocumentTitleAndParagraphsEqual(_10ParagraphsDocument, null,
+                new List<string> { "1", "2", "3", "4", "5", "6", "7", "8", "9" });
+
+            _10ParagraphsDocument.Undo();
+            AreDocumentTitleAndParagraphsEqual(_10ParagraphsDocument, null,
+                new List<string> { "1", "2", "3", "4", "5", "6", "7", "8" });
+
+            _10ParagraphsDocument.Undo();
+            AreDocumentTitleAndParagraphsEqual(_10ParagraphsDocument, null,
+                new List<string> { "1", "2", "3", "4", "5", "6", "7" });
+
+            _10ParagraphsDocument.Undo();
+            AreDocumentTitleAndParagraphsEqual(_10ParagraphsDocument, null,
+                new List<string> { "1", "2", "3", "4", "5", "6" });
+
+            _10ParagraphsDocument.Undo();
+            AreDocumentTitleAndParagraphsEqual(_10ParagraphsDocument, null,
+                new List<string> { "1", "2", "3", "4", "5" });
+
+            _10ParagraphsDocument.Undo();
+            AreDocumentTitleAndParagraphsEqual(_10ParagraphsDocument, null,
+                new List<string> { "1", "2", "3", "4" });
+
+            _10ParagraphsDocument.Undo();
+            AreDocumentTitleAndParagraphsEqual(_10ParagraphsDocument, null,
+                new List<string> { "1", "2", "3" });
+
+            _10ParagraphsDocument.Undo();
+            AreDocumentTitleAndParagraphsEqual(_10ParagraphsDocument, null,
+                new List<string> { "1", "2", "3" });
+
+            _10ParagraphsDocument.Undo();
+            AreDocumentTitleAndParagraphsEqual(_10ParagraphsDocument, null,
+                new List<string> { "1", "2", "3" });
         }
 
         [TestMethod]
-        public void CanRedoAdditionOfParagraph()
+        public void CanRedo10LastParagraphInsertion()
         {
-            /*Document expectedDoc = CreateTestDoc("Title",
-                new List<string> { "first", "second", "third" });
+            _10ParagraphsDocument.InsertParagraph("11");
+            _10ParagraphsDocument.InsertParagraph("12");
+            _10ParagraphsDocument.InsertParagraph("13");
 
-            _document.SetTitle("Title");
-            _document.InsertItem(new DocumentItem(new Paragraph("first")));
-            _document.InsertItem(new DocumentItem(new Paragraph("second")));
-            _document.InsertItem(new DocumentItem(new Paragraph("third")));
+            _10ParagraphsDocument.Undo();
+            _10ParagraphsDocument.Undo();
+            _10ParagraphsDocument.Undo();
+            _10ParagraphsDocument.Undo();
+            _10ParagraphsDocument.Undo();
+            _10ParagraphsDocument.Undo();
+            _10ParagraphsDocument.Undo();
+            _10ParagraphsDocument.Undo();
+            _10ParagraphsDocument.Undo();
+            _10ParagraphsDocument.Undo();
+            _10ParagraphsDocument.Undo();
+            _10ParagraphsDocument.Undo();
 
-            AreDocumentTitleAndParagraphsEqual(_document, expectedDoc);*/
+            AreDocumentTitleAndParagraphsEqual(_10ParagraphsDocument, null,
+                new List<string> { "1", "2", "3" });
+
+            _10ParagraphsDocument.Redo();
+            AreDocumentTitleAndParagraphsEqual(_10ParagraphsDocument, null,
+                new List<string> { "1", "2", "3", "4" });
+
+            _10ParagraphsDocument.Redo();
+            AreDocumentTitleAndParagraphsEqual(_10ParagraphsDocument, null,
+                new List<string> { "1", "2", "3", "4", "5" });
+
+            _10ParagraphsDocument.Redo();
+            AreDocumentTitleAndParagraphsEqual(_10ParagraphsDocument, null,
+                new List<string> { "1", "2", "3", "4", "5", "6" });
+
+            _10ParagraphsDocument.Redo();
+            AreDocumentTitleAndParagraphsEqual(_10ParagraphsDocument, null,
+                new List<string> { "1", "2", "3", "4", "5", "6", "7" });
+
+            _10ParagraphsDocument.Redo();
+            AreDocumentTitleAndParagraphsEqual(_10ParagraphsDocument, null,
+                new List<string> { "1", "2", "3", "4", "5", "6", "7", "8" });
+
+            _10ParagraphsDocument.Redo();
+            AreDocumentTitleAndParagraphsEqual(_10ParagraphsDocument, null,
+                new List<string> { "1", "2", "3", "4", "5", "6", "7", "8", "9" });
+
+            _10ParagraphsDocument.Redo();
+            AreDocumentTitleAndParagraphsEqual(_10ParagraphsDocument, null,
+                new List<string> { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" });
+
+            _10ParagraphsDocument.Redo();
+            AreDocumentTitleAndParagraphsEqual(_10ParagraphsDocument, null,
+                new List<string> { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11" });
+
+            _10ParagraphsDocument.Redo();
+            AreDocumentTitleAndParagraphsEqual(_10ParagraphsDocument, null,
+                new List<string> { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12" });
+
+            _10ParagraphsDocument.Redo();
+            AreDocumentTitleAndParagraphsEqual(_10ParagraphsDocument, null,
+                new List<string> { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13" });
+
+            _10ParagraphsDocument.Redo();
+            AreDocumentTitleAndParagraphsEqual(_10ParagraphsDocument, null,
+                new List<string> { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13" });
+
+            _10ParagraphsDocument.Redo();
+            AreDocumentTitleAndParagraphsEqual(_10ParagraphsDocument, null,
+                new List<string> { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13" });
         }
 
-        // и сохранить в хтмл
+        [TestMethod]
+        public void CanRedoParagraphInsertionWithClearHistory()
+        {
+            _10ParagraphsDocument.InsertParagraph("11");
+            _10ParagraphsDocument.InsertParagraph("12");
+            _10ParagraphsDocument.InsertParagraph("13");
+
+            _10ParagraphsDocument.Undo();
+            _10ParagraphsDocument.Undo();
+            _10ParagraphsDocument.Undo();
+            _10ParagraphsDocument.Undo();
+            _10ParagraphsDocument.Undo();
+            _10ParagraphsDocument.Undo();
+            _10ParagraphsDocument.Undo();
+            _10ParagraphsDocument.Undo();
+            _10ParagraphsDocument.Undo();
+            _10ParagraphsDocument.Undo();
+            _10ParagraphsDocument.Undo();
+            _10ParagraphsDocument.Undo();
+
+            AreDocumentTitleAndParagraphsEqual(_10ParagraphsDocument, null,
+                new List<string> { "1", "2", "3" });
+
+            // восстановим часть старой истории
+            _10ParagraphsDocument.Redo();
+            _10ParagraphsDocument.Redo();
+            _10ParagraphsDocument.Redo();
+            _10ParagraphsDocument.Redo();
+            _10ParagraphsDocument.Redo();
+            _10ParagraphsDocument.Redo();
+            _10ParagraphsDocument.Redo();
+            AreDocumentTitleAndParagraphsEqual(_10ParagraphsDocument, null,
+                new List<string> { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" });
+
+            // напишем новую историю
+            _10ParagraphsDocument.InsertParagraph("11'");
+            _10ParagraphsDocument.InsertParagraph("12'");
+            AreDocumentTitleAndParagraphsEqual(_10ParagraphsDocument, null,
+                new List<string> { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11'", "12'" });
+
+            _10ParagraphsDocument.Redo(); // проверка, что Redo() "в будущее" при новой истории не срабатывает
+            AreDocumentTitleAndParagraphsEqual(_10ParagraphsDocument, null,
+                new List<string> { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11'", "12'" });
+
+            // вернемся до границы старой и новой истории
+            _10ParagraphsDocument.Undo();
+            AreDocumentTitleAndParagraphsEqual(_10ParagraphsDocument, null,
+                new List<string> { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11'" });
+
+            _10ParagraphsDocument.Undo();
+            AreDocumentTitleAndParagraphsEqual(_10ParagraphsDocument, null,
+                new List<string> { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" });
+
+            // видим, что можно восстанановить только новая историю
+            _10ParagraphsDocument.Redo();
+            AreDocumentTitleAndParagraphsEqual(_10ParagraphsDocument, null,
+                new List<string> { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11'" });
+
+            _10ParagraphsDocument.Redo();
+            AreDocumentTitleAndParagraphsEqual(_10ParagraphsDocument, null,
+                new List<string> { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11'", "12'" });
+
+            _10ParagraphsDocument.Redo();
+            AreDocumentTitleAndParagraphsEqual(_10ParagraphsDocument, null,
+                new List<string> { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11'", "12'" });
+        }
+
+
 
 
         // потом что можно делать вообще с доком
 
+
+
+        // и сохранить в хтмл
+
+
         // конец
-
-
     }
 }

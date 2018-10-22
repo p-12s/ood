@@ -4,13 +4,13 @@ namespace DocumentEditorLib
 {
     public interface ICommand
     {
-        void Execute();
+        void Execute(bool isNotRestoreCommand = true);
         void Unexecute();
     }
 
     public class Help : ICommand
     {
-        public void Execute() // может не стоит там перехватывать
+        public void Execute(bool isNotRestoreCommand = true) // может не стоит там перехватывать
         {
         }
         public void Unexecute()
@@ -27,7 +27,7 @@ namespace DocumentEditorLib
             _document = document;
         }
 
-        public void Execute()
+        public void Execute(bool isNotRestoreCommand = true) // тут дублирование и бесполезость
         {
             Console.WriteLine("Title: " + _document.GetTitle());
             int i = 1;
@@ -54,7 +54,7 @@ namespace DocumentEditorLib
             _title = title;
         }
 
-        public void Execute()
+        public void Execute(bool isNotRestoreCommand = true)
         {
             _document.SetTitle(_title);
         }
@@ -72,25 +72,37 @@ namespace DocumentEditorLib
         private string _previousText;
         private int _position;
 
-        // делаем еще и инвертированную команду
-        // причем каждый экземпляр будет содержать разные значения
         public InsertParagraph(Document document, string text, int? position = null)
         {
             _document = document;
             _text = text;
 
             _position = position ?? (_document.GetDocumentItems().Count - 1);
-            _previousText = document.;// предыдущий текст в изменяемой позиции закидываю в отменение операции
+            
+            // сохраняю текст на случай отмены операции
+            if (position == null || _position == _document.GetDocumentItems().Count - 1)
+            {
+                _previousText = null;
+            }
+            else
+            {
+                _previousText = document.GetItem(_position).GetItem().GetText();
+            }
+            
         }
 
-        public void Execute()
+        // если нужно выполнить "восстановление" удаленной - передаем false
+        public void Execute(bool isNotRestoreCommand = true)
         {
-            _document.InsertParagraph(_text, _position);//
+            _document.InsertParagraph(_text, _position, isNotRestoreCommand);
         }
 
         public void Unexecute()
         {
-            Console.WriteLine("Unexecute InsertParagraph");
+            if (_previousText == null)
+                _document.DeleteItem(_position);
+            else
+                _document.InsertParagraph(_previousText, _position);
         }
     };
 
@@ -105,7 +117,7 @@ namespace DocumentEditorLib
             _index = index;
         }
 
-        public void Execute()
+        public void Execute(bool isNotRestoreCommand = true)
         {
             _document.DeleteItem(_index);//не реально удаляет, а помечает
         }
@@ -126,7 +138,7 @@ namespace DocumentEditorLib
             _document = document;
         }
 
-        public void Execute()
+        public void Execute(bool isNotRestoreCommand = true)
         {
             _document.Undo();
         }
@@ -146,7 +158,7 @@ namespace DocumentEditorLib
             _document = document;
         }
 
-        public void Execute()
+        public void Execute(bool isNotRestoreCommand = true)
         {
             _document.Redo();
         }

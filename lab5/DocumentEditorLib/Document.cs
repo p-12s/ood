@@ -31,7 +31,7 @@ namespace DocumentEditorLib
 
         //void InsertItem(DocumentItem documentItem, int? position = null);
 
-        void InsertParagraph(string text, int? position = null);
+        void InsertParagraph(string text, int? position = null, bool isNotRestoreCommand = true);
 
         void DeleteItem(int index);
 
@@ -87,7 +87,7 @@ namespace DocumentEditorLib
                 _items.AddLast(documentItem);
         }*/
 
-        public void InsertParagraph(string text, int? position = null)
+        public void InsertParagraph(string text, int? position = null, bool isNotRestoreCommand = true)
         {
             if (position > _items.Count)
             {
@@ -101,15 +101,24 @@ namespace DocumentEditorLib
             }
             else
             {
-                _items.AddLast(item);//так-то надо по индексу вставлять, пока пойдет
+                _items.AddLast(item); // так-то надо по индексу вставлять, пока пойдет
             }
+            //тут надо различать новую команду и осстанавлиаве6мую
 
-            _history.AddCommand(new InsertParagraph(this, text));
+            if (isNotRestoreCommand)
+                _history.AddCommand(new InsertParagraph(this, text));
         }
 
         public void DeleteItem(int index)//лучше использовать массив, а не LinkedList
         {
-            _items.RemoveLast();
+            //бывает удалить нужно как первый, так средний и конечный элемент
+
+            // может тут возвращать этот элемент? 
+            if (index >= 0 && index < _items.Count)
+            {
+                var deletedItem = _items.ElementAt(index);
+                _items.Remove(deletedItem);
+            }
         }
 
         public void Undo()
@@ -117,7 +126,6 @@ namespace DocumentEditorLib
             if (_history.CanUndo())
             {
                 _history.Undo();
-                
             }
             else
             {
@@ -136,7 +144,7 @@ namespace DocumentEditorLib
 
         public DocumentItem GetItem(int index) // может сделать приватным? извне он не нужен
         {
-            if (index <= (_items.Count - 1))
+            if (index >= 0 && index <= (_items.Count - 1))
             {
                 return _items.ElementAt(index);
             }
