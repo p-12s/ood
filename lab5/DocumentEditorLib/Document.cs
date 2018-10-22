@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace DocumentEditorLib
@@ -38,6 +39,8 @@ namespace DocumentEditorLib
         void Undo();
 
         void Redo();
+
+        void Save(string path);
 
         /*
         void InsertImage(Img img);
@@ -151,18 +154,38 @@ namespace DocumentEditorLib
             return null;
         }
 
+        public void Save(string path)
+        {
+            // собрать html-строку 
+            string paragraphList = "";
+            foreach (var item in _items)
+            {
+                paragraphList += "<p>" + item.GetItem().GetText() + "</p>";
+            }
+
+            string html = string.Format("<!doctype html>" +
+                "<html lang=\"en\">" +
+                "<head>" +
+                "<meta charset=\"utf-8\">" +
+                "<title>{0}</title>" +
+                "</head>" +
+                "<body>" +
+                "{1}" +
+                "</body>" +
+                "</html>", _title ?? "", paragraphList);
+
+            using (StreamWriter writer = new StreamWriter(@"C:\Users\user\Desktop\test.html"))
+            {
+                // сохранить
+                writer.Write(html);
+            }
+
+        }
+
         /*
         void InsertImage(Img img)
         {
             //Paragraph paragraph = new Paragraph(text);
-            throw new NotImplementedException();
-        }
-
-
-        
-
-        public void Save(string path)
-        {
             throw new NotImplementedException();
         }*/
     }

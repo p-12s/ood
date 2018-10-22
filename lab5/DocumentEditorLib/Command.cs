@@ -168,4 +168,26 @@ namespace DocumentEditorLib
             Console.WriteLine("Unexecute Redo");
         }
     };
+
+    public class Save : ICommand
+    {
+        private Document _document;
+        private string _path;
+
+        public Save(Document document, string path)
+        {
+            _document = document;
+            _path = path;
+        }
+
+        public void Execute(bool isNotRestoreCommand = true)
+        {
+            _document.Save(_path);
+        }
+
+        public void Unexecute()
+        {
+            Console.WriteLine("Unexecute Save");
+        }
+    };
 }
