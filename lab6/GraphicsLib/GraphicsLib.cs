@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 
 // Пространство имен графической библиотеки (недоступно для изменения)
 namespace GraphicsLib
@@ -64,15 +63,17 @@ namespace ShapeDrawingLib
 
         public void Draw(GraphicsLib.ICanvas canvas)
         {
-            // TODO: написать код рисования треугольника на холсте
+            canvas.MoveTo(_p1.X, _p1.Y);
+            canvas.LineTo(_p2.X, _p2.Y);
+            canvas.LineTo(_p3.X, _p3.Y);
+            canvas.LineTo(_p1.X, _p1.Y);
         }
     }
 
     public class Rectangle : ICanvasDrawable
     {
         private Point _leftTop;
-        private int _width, _height; // TODO: дописать приватную часть 
-
+        private int _width, _height; // TODO: дописать приватную часть
 
         public Rectangle(Point leftTop, int width, int height)
         {
@@ -84,24 +85,32 @@ namespace ShapeDrawingLib
 
         public void Draw(GraphicsLib.ICanvas canvas) // TODO тут все const override. как это будет в шарпе? может использовать шаблонный метод?
         {
-	        // TODO: написать код рисования прямоугольника на холсте
+            canvas.MoveTo(_leftTop.X, _leftTop.Y);
+            canvas.LineTo(_leftTop.X + _width, _leftTop.Y);
+            canvas.LineTo(_leftTop.X + _width, _leftTop.Y - _height);
+            canvas.LineTo(_leftTop.X, _leftTop.Y - _height);
+            canvas.LineTo(_leftTop.X, _leftTop.Y);
         }
     };
 
     // Художник, способный рисовать ICanvasDrawable-объекты на ICanvas
     public class CanvasPainter
     {
-        //private:
-	    // TODO: дописать приватную часть
+        private ICanvasDrawable _obj;
+        private GraphicsLib.ICanvas _canvas;
 
+        // TODO: дописать приватную часть
         public CanvasPainter(GraphicsLib.ICanvas canvas)
         {
             // TODO: дописать конструктор класса
+            _canvas = canvas;
         }
+
         public void Draw(ICanvasDrawable drawable)
 	    {
-		    // TODO: дописать код рисования ICanvasDrawable на canvas, переданном в конструктор
-	    }
+            // TODO: дописать код рисования ICanvasDrawable на canvas, переданном в конструктор
+            _obj.Draw(_canvas); // а как иниц. объект _obj ?
+        }
     };
 }
 
@@ -121,21 +130,108 @@ namespace ModernGraphicsLib
         }
     };
 
+
+    public class SomeClass : IDisposable
+    {
+        private bool disposed = false;
+
+        // реализация интерфейса IDisposable.
+        public void Dispose()
+        {
+            Dispose(true);
+            // подавляем финализацию
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposed)
+            {
+                if (disposing)
+                {
+                    // Освобождаем управляемые ресурсы
+                }
+                // освобождаем неуправляемые объекты
+                disposed = true;
+            }
+        }
+
+        // Деструктор
+        ~SomeClass()
+        {
+            Dispose(false);
+        }
+    }
+
     // Класс для современного рисования графики
-    public class ModernGraphicsRenderer
+    public class ModernGraphicsRenderer : IDisposable
     {
         //private Stream _out; для простоты выводим к консоль
         private bool _drawing;
+        private bool _disposed;
 
         public ModernGraphicsRenderer()
         {
             _drawing = false;
+            _disposed = false;
         }
 
+        /*
+        1 вариант деструктора:
         ~ModernGraphicsRenderer()
         {
             if (_drawing) // Завершаем рисование, если оно было начато
                 EndDraw();
+        }
+        деструктор будет скомпилирован в:
+
+        protected override void Finalize()
+        {
+            try
+            {
+                if (_drawing) // Завершаем рисование, если оно было начато
+                    EndDraw();
+            }
+            finally
+            {
+                base.Finalize();
+            }
+        }
+
+        минус подхода в том, что освобождение ресурсов выполняется не сразу.
+        На уровне памяти это выглядит так: сборщик мусора при размещении объекта в куче определяет, 
+        поддерживает ли данный объект метод Finalize. И если объект имеет метод Finalize, 
+        то указатель на него сохраняется в специальной таблице, которая называется очередь финализации. 
+        Когда наступает момент сборки мусора, сборщик видит, что данный объект должен быть уничтожен, 
+        и если он имеет метод Finalize, то он копируется в еще одну таблицу и окончательно уничтожается лишь 
+        при следующем проходе сборщика мусора.
+        
+        поэтому 2 вариант:
+        */
+
+        public void Dispose()
+        {
+            Dispose(true);            
+            GC.SuppressFinalize(this); // подавляем финализацию
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                    // Освобождаем управляемые ресурсы
+                    EndDraw();
+                }
+                // освобождаем неуправляемые объекты
+                _disposed = true;
+            }
+        }
+
+        ~ModernGraphicsRenderer()
+        {
+            Dispose(false);
         }
 
         // Этот метод должен быть вызван в начале рисования
@@ -170,48 +266,6 @@ namespace ModernGraphicsLib
     };
 }
 
-
-
-/////////////
-///
-// Пространство имен приложения (доступно для модификации)
-namespace App
-{
-    public void PaintPicture(ShapeDrawingLib.CanvasPainter painter)
-    {
-        //using ShapeDrawingLib;
-
-        new ShapeDrawingLib.Triangle(
-            new ShapeDrawingLib.Point(10, 15),
-            new ShapeDrawingLib.Point(100, 200),
-            new ShapeDrawingLib.Point(150, 250)
-            );
-
-        new ShapeDrawingLib.Rectangle(
-            new ShapeDrawingLib.Point(10, 15),
-            18, 24);
-
-        // TODO: нарисовать прямоугольник и треугольник при помощи painter
-    }
-
-    void PaintPictureOnCanvas()
-    {
-        GraphicsLib.Canvas simpleCanvas;
-        ShapeDrawingLib.CanvasPainter painter(simpleCanvas);
-        PaintPicture(painter);
-    }
-
-    void PaintPictureOnModernGraphicsRenderer()
-    {
-        ModernGraphicsLib.ModernGraphicsRenderer renderer();//рисуем в консоль, убрал cout
-        //(void)&renderer; // устраняем предупреждение о неиспользуемой переменной
-
-        // TODO: при помощи существующей функции PaintPicture() нарисовать
-        // картину на renderer
-        // Подсказка: используйте паттерн "Адаптер"
-    }
-}
-
 namespace GraphicsLibPro
 {
     // Холст для рисования
@@ -226,20 +280,23 @@ namespace GraphicsLibPro
     // Реализация холста для рисования
     class Canvas : ICanvas
     {
+        private uint _rgbColor;
 
         public void SetColor(uint rgbColor) // опуть тут override - как заменить?
         {
-	        // TODO: вывести в output цвет в виде строки SetColor (#RRGGBB)
+            // TODO: вывести в output цвет в виде строки SetColor (#RRGGBB)
+            _rgbColor = rgbColor;
+            Console.WriteLine("Установлен цвет холста: " + _rgbColor);
         }
 
         public void MoveTo(int x, int y)
         {
-	        // Реализация остается без изменения
+            Console.WriteLine("MoveTo ({0}, {1})", x, y);
         }
 
         public void LineTo(int x, int y)
         {
-	        // Реализация остается без изменения
+            Console.WriteLine("LineTo ({0}, {1})", x, y);
         }
     };
 }
@@ -260,7 +317,7 @@ namespace ModernGraphicsLibPro
     };
 
     // Цвет в формате RGBA, каждый компонент принимает значения от 0.0f до 1.0f
-    class RGBAColor
+    public class RGBAColor
     {
         public float R { get; set; }
         public float G { get; set; }
@@ -277,40 +334,76 @@ namespace ModernGraphicsLibPro
     };
 
     // Класс для современного рисования графики
-    class ModernGraphicsRenderer
+    public class ModernGraphicsRenderer
     {
         private bool _drawing;
+        private bool _disposed;
 
         public ModernGraphicsRenderer()
         {
             _drawing = false;
+            _disposed = false;
+        }
+    
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this); // подавляем финализацию
         }
 
-        ~ModernGraphicsRenderer() // возможно не нужен
+        protected virtual void Dispose(bool disposing)
         {
-            // Реализация остается без изменения
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                    // Освобождаем управляемые ресурсы
+                    EndDraw();
+                }
+                // освобождаем неуправляемые объекты
+                _disposed = true;
+            }
+        }
+
+        ~ModernGraphicsRenderer()
+        {
+            Dispose(false);
         }
 
         // Этот метод должен быть вызван в начале рисования
-        public void BeginDraw() // TODO вспомогательное сделать приватным
+        public void BeginDraw()
         {
-            // Реализация остается без изменения
+            if (_drawing)
+                throw new InvalidOperationException("Drawing has already begun");
+
+            Console.WriteLine("<draw>");
+            _drawing = true;
         }
 
         // Выполняет рисование линии
+        // Можно вызывать только между BeginDraw() и EndDraw()
         public void DrawLine(Point start, Point end, RGBAColor color)
-	    {
-		    // TODO: выводит в output инструкцию для рисования линии в виде
-		    // <line fromX="3" fromY="5" toX="5" toY="17">
-		    //   <color r="0.35" g="0.47" b="1.0" a="1.0" />
-		    // </line>
-		    // Можно вызывать только между BeginDraw() и EndDraw()
-	    }
-
-	    // Этот метод должен быть вызван в конце рисования
-	    void EndDraw()
         {
-            // Реализация остается без изменения
-        }	
+            if (!_drawing)
+                throw new InvalidOperationException("DrawLine is allowed between BeginDraw()/EndDraw() only");
+
+            Console.WriteLine("(<line from X=\"{0}\" from Y=\"{1}\" to X=\"{2}\" to Y=\"{3}\"/>)", 
+                start.X, start.Y, end.X, end.Y);
+            Console.WriteLine("<color r=\"{0}\" g=\"{1}\" b=\"{2}\" a=\"{3}\"/>",
+                color.R, color.G, color.B, color.A);
+            Console.WriteLine("<line/>");
+
+        }
+
+        // Этот метод должен быть вызван в конце рисования
+        void EndDraw()
+        {
+            if (!_drawing)
+                throw new InvalidOperationException("Drawing has not been started");
+
+            Console.WriteLine("</draw>");
+            _drawing = false;
+        }
+
     };
 }
