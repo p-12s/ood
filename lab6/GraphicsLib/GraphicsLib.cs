@@ -63,6 +63,7 @@ namespace ShapeDrawingLib
 
         public void Draw(GraphicsLib.ICanvas canvas)
         {
+            Console.WriteLine("Draw a Triangle:");
             canvas.MoveTo(_p1.X, _p1.Y);
             canvas.LineTo(_p2.X, _p2.Y);
             canvas.LineTo(_p3.X, _p3.Y);
@@ -85,6 +86,7 @@ namespace ShapeDrawingLib
 
         public void Draw(GraphicsLib.ICanvas canvas) // TODO тут все const override. как это будет в шарпе? может использовать шаблонный метод?
         {
+            Console.WriteLine("Draw a Rectangle");
             canvas.MoveTo(_leftTop.X, _leftTop.Y);
             canvas.LineTo(_leftTop.X + _width, _leftTop.Y);
             canvas.LineTo(_leftTop.X + _width, _leftTop.Y - _height);
@@ -106,10 +108,11 @@ namespace ShapeDrawingLib
             _canvas = canvas;
         }
 
-        public void Draw(ICanvasDrawable drawable)
+        public void Draw(ICanvasDrawable obj)
 	    {
+            _obj = obj;
             // TODO: дописать код рисования ICanvasDrawable на canvas, переданном в конструктор
-            _obj.Draw(_canvas); // а как иниц. объект _obj ?
+            _obj.Draw(_canvas);
         }
     };
 }
@@ -130,39 +133,6 @@ namespace ModernGraphicsLib
         }
     };
 
-
-    public class SomeClass : IDisposable
-    {
-        private bool disposed = false;
-
-        // реализация интерфейса IDisposable.
-        public void Dispose()
-        {
-            Dispose(true);
-            // подавляем финализацию
-            GC.SuppressFinalize(this);
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposed)
-            {
-                if (disposing)
-                {
-                    // Освобождаем управляемые ресурсы
-                }
-                // освобождаем неуправляемые объекты
-                disposed = true;
-            }
-        }
-
-        // Деструктор
-        ~SomeClass()
-        {
-            Dispose(false);
-        }
-    }
-
     // Класс для современного рисования графики
     public class ModernGraphicsRenderer : IDisposable
     {
@@ -175,6 +145,8 @@ namespace ModernGraphicsLib
             _drawing = false;
             _disposed = false;
         }
+
+        #region Destructor
 
         /*
         1 вариант деструктора:
@@ -234,6 +206,8 @@ namespace ModernGraphicsLib
             Dispose(false);
         }
 
+        #endregion
+
         // Этот метод должен быть вызван в начале рисования
         public void BeginDraw()
         {
@@ -254,7 +228,7 @@ namespace ModernGraphicsLib
         }
 
         // Этот метод должен быть вызван в конце рисования
-        void EndDraw()
+        public void EndDraw()
         {
             if (!_drawing)
                 throw new InvalidOperationException("Drawing has not been started");
@@ -286,7 +260,7 @@ namespace GraphicsLibPro
         {
             // TODO: вывести в output цвет в виде строки SetColor (#RRGGBB)
             _rgbColor = rgbColor;
-            Console.WriteLine("Установлен цвет холста: " + _rgbColor);
+            Console.WriteLine("Canvas color set: " + _rgbColor);
         }
 
         public void MoveTo(int x, int y)
@@ -334,7 +308,7 @@ namespace ModernGraphicsLibPro
     };
 
     // Класс для современного рисования графики
-    public class ModernGraphicsRenderer
+    public class ModernGraphicsRenderer : IDisposable
     {
         private bool _drawing;
         private bool _disposed;
@@ -344,7 +318,9 @@ namespace ModernGraphicsLibPro
             _drawing = false;
             _disposed = false;
         }
-    
+
+        #region Destructor
+
         public void Dispose()
         {
             Dispose(true);
@@ -369,6 +345,8 @@ namespace ModernGraphicsLibPro
         {
             Dispose(false);
         }
+
+        #endregion
 
         // Этот метод должен быть вызван в начале рисования
         public void BeginDraw()
