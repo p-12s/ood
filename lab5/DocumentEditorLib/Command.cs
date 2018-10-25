@@ -65,46 +65,81 @@ namespace DocumentEditorLib
         }
     };
 
+    interface IDocumentItems
+    {
+        void InsertItem(DocumentItem item, int position);
+        DocumentItem RemoveItem(int position);
+    }
+
+
     public class InsertParagraph : ICommand
     {
-        private Document _document;
-        private string _text;
-        private string _previousText;
-        private int _position;
+        //private Document _document;
+        //private string _text;
+        //private string _previousText;
+        //private int _position;
 
-        public InsertParagraph(Document document, string text, int? position = null)
+        IDocumentItems _items;
+        DocumentItem _paragraphItem;
+        int _position;
+        //передавать интер
+        public InsertParagraph(IDocumentItems items, int position, string text) // end преобразовать в последний номер, пока -1
         {
-            _document = document;
-            _text = text;
+            _paragraphItem = new DocumentItem(new Paragraph(text));
+            _position = position;
+            _items = items;
 
-            _position = position ?? (_document.GetDocumentItems().Count - 1);
+            //_document = document;
+            //_text = text;
+
+            //_position = (position == -1) ? (_document.GetDocumentItems().Count - 1) : position;
             
-            // сохраняю текст на случай отмены операции
-            if (position == null || _position == _document.GetDocumentItems().Count - 1)
-            {
-                _previousText = null;
-            }
-            else
-            {
-                _previousText = document.GetItem(_position).GetItem().GetText();
-            }
-            
+            //// сохраняю текст на случай отмены операции
+            //if (_position == _document.GetDocumentItems().Count - 1)
+            //{
+            //    _previousText = null;
+            //}
+            //else
+            //{
+            //    _previousText = document.GetItem(_position).GetItem().GetText();
+            //}
         }
 
         // если нужно выполнить "восстановление" удаленной - передаем false
-        public void Execute(bool isNotRestoreCommand = true)
+        public void Execute()
         {
-            _document.InsertParagraph(_text, _position, isNotRestoreCommand);
+            _items.InsertItem(_paragraphItem, _position);
+            //_document.InsertParagraph(_position, _text, isNotRestoreCommand);
         }
 
         public void Unexecute()
         {
-            if (_previousText == null)
-                _document.DeleteItem(_position);
-            else
-                _document.InsertParagraph(_previousText, _position);
+            _items.RemoveItem(_position);
+            //if (_previousText == null)
+            //    _document.DeleteItem(_position);
+            //else
+            //    _document.InsertParagraph(_position, _previousText);
         }
     };
+
+    class Document1 : IDocumentItems
+    {
+        public void InsertItem(DocumentItem item, int position)
+        {
+           // поместить item в коллекцию
+        }
+
+        public DocumentItem RemoveItem(int position)
+        {
+
+            // удалить item из коллекции и вернуть его
+        }
+
+        void InsertParagraph(int pos, string text)
+        {
+            var cmd = new InsertParagraph(this, pos, text);
+        }
+    }
 
     public class DeleteItem : ICommand
     {

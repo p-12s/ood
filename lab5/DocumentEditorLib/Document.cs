@@ -9,6 +9,7 @@ namespace DocumentEditorLib
     public class DocumentItem
     {
         private Paragraph _paragraph;
+        private Img _img;
 
         public DocumentItem(Paragraph paragraph)
         {
@@ -32,7 +33,7 @@ namespace DocumentEditorLib
 
         //void InsertItem(DocumentItem documentItem, int? position = null);
 
-        void InsertParagraph(string text, int? position = null, bool isNotRestoreCommand = true);
+        void InsertParagraph(int position, string text, bool isNotRestoreCommand = true);
 
         void DeleteItem(int index);
 
@@ -90,7 +91,9 @@ namespace DocumentEditorLib
                 _items.AddLast(documentItem);
         }*/
 
-        public void InsertParagraph(string text, int? position = null, bool isNotRestoreCommand = true)
+            // как считать 
+        // InsertParagraph <позиция>|end <текст параграфа>
+        public void InsertParagraph(int position, string text, bool isNotRestoreCommand = true)
         {
             if (position > _items.Count)
             {
@@ -98,21 +101,39 @@ namespace DocumentEditorLib
             }
 
             DocumentItem item = new DocumentItem(new Paragraph(text));
-            if (position == null)
+            if (position == -1) // в конец
             {
                 _items.AddLast(item);
             }
             else
             {
-                _items.AddLast(item); // так-то надо по индексу вставлять, пока пойдет
+                //for(int i = 0; i < _items.)
+                //AddAfter(LinkedListNode<T> node, T value): вставляет в список новый узел со значением value после узла node.
+                //LinkedListNode<Person> tom = persons.AddLast(new Person() { Name = "Tom" });
+
+                LinkedListNode<DocumentItem> lastItem = _items.First;
+                if (lastItem == null)
+                {
+                    _items.AddLast(item);
+                }
+                else
+                {
+                    int index = 0;
+                    while (position > index)
+                    {
+                        lastItem = lastItem.Next;
+                        index += 1;
+                    }
+                    //_items.AddAfter(lastItem, item); lastItem почему-то null
+                    _items.AddLast(item);
+                }
             }
-            //тут надо различать новую команду и осстанавлиаве6мую
 
             if (isNotRestoreCommand)
-                _history.AddCommand(new InsertParagraph(this, text));
+                _history.AddCommand(new InsertParagraph(this, position, text));
         }
 
-        public void DeleteItem(int index)//лучше использовать массив, а не LinkedList
+        public void DeleteItem(int index)
         {
             //бывает удалить нужно как первый, так средний и конечный элемент
 
@@ -132,7 +153,7 @@ namespace DocumentEditorLib
             }
             else
             {
-                Console.WriteLine("Операция отмены не может быть выполнена");
+                Console.WriteLine("Undo operation cannot be performed");
             }
 
         }
@@ -142,7 +163,7 @@ namespace DocumentEditorLib
             if (_history.CanRedo())
                 _history.Redo();
             else
-                Console.WriteLine("Операция возврата не может быть выполнена");
+                Console.WriteLine("Redo operation cannot be performed");
         }
 
         public DocumentItem GetItem(int index) // может сделать приватным? извне он не нужен
@@ -156,7 +177,6 @@ namespace DocumentEditorLib
 
         public void Save(string path)
         {
-            // собрать html-строку 
             string paragraphList = "";
             foreach (var item in _items)
             {
@@ -174,9 +194,9 @@ namespace DocumentEditorLib
                 "</body>" +
                 "</html>", _title ?? "", paragraphList);
 
+            // передавать директорию, в ней создавать папку
             using (StreamWriter writer = new StreamWriter(@"C:\Users\user\Desktop\test.html"))
             {
-                // сохранить
                 writer.Write(html);
             }
 

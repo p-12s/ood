@@ -23,6 +23,7 @@ namespace DocumentEditorLib
         private bool ExecuteCommand(string command)
         {
             _exit = false;
+            // до первого пробела
 
             if (_items.ContainsKey(command))//InsertParagraph (пока без строки и позиции)
             {
@@ -65,6 +66,7 @@ namespace DocumentEditorLib
                 {
                     break;
                 }
+                //
                 ExecuteCommand(command);
             }
         }
@@ -74,8 +76,9 @@ namespace DocumentEditorLib
             Console.WriteLine("Commands list:");
             foreach (var item in _items)
             {
-                Console.WriteLine("\n" + item.Key + ": " + item.Value._description);
+                Console.WriteLine(item.Key + ": " + item.Value._description);
             }
+            Console.WriteLine();
         }
 
         public void Exit()

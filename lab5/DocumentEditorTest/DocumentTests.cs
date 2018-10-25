@@ -24,7 +24,7 @@ namespace DocumentEditorTest
             Document doc = new Document(title);
             foreach (var p in paragraphs)
             {
-                doc.InsertParagraph(p);
+                doc.InsertParagraph(-1, p);
             }            
             return doc;
         }
@@ -51,16 +51,16 @@ namespace DocumentEditorTest
         [TestInitialize()]
         public void TestInitialize()
         {
-            _10ParagraphsDocument.InsertParagraph("1");
-            _10ParagraphsDocument.InsertParagraph("2");
-            _10ParagraphsDocument.InsertParagraph("3");
-            _10ParagraphsDocument.InsertParagraph("4");
-            _10ParagraphsDocument.InsertParagraph("5");
-            _10ParagraphsDocument.InsertParagraph("6");
-            _10ParagraphsDocument.InsertParagraph("7");
-            _10ParagraphsDocument.InsertParagraph("8");
-            _10ParagraphsDocument.InsertParagraph("9");
-            _10ParagraphsDocument.InsertParagraph("10");
+            _10ParagraphsDocument.InsertParagraph(-1, "1");
+            _10ParagraphsDocument.InsertParagraph(-1, "2");
+            _10ParagraphsDocument.InsertParagraph(-1, "3");
+            _10ParagraphsDocument.InsertParagraph(-1, "4");
+            _10ParagraphsDocument.InsertParagraph(-1, "5");
+            _10ParagraphsDocument.InsertParagraph(-1, "6");
+            _10ParagraphsDocument.InsertParagraph(-1, "7");
+            _10ParagraphsDocument.InsertParagraph(-1, "8");
+            _10ParagraphsDocument.InsertParagraph(-1, "9");
+            _10ParagraphsDocument.InsertParagraph(-1, "10");
         }
 
         [TestMethod]
@@ -103,9 +103,9 @@ namespace DocumentEditorTest
         [TestMethod]
         public void CanUndo10LastParagraphInsertion()
         {
-            _10ParagraphsDocument.InsertParagraph("11");
-            _10ParagraphsDocument.InsertParagraph("12");
-            _10ParagraphsDocument.InsertParagraph("13");
+            _10ParagraphsDocument.InsertParagraph(-1, "11");
+            _10ParagraphsDocument.InsertParagraph(-1, "12");
+            _10ParagraphsDocument.InsertParagraph(-1, "13");
 
             AreDocumentTitleAndParagraphsEqual(_10ParagraphsDocument, null,
                 new List<string> { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13" });
@@ -162,9 +162,9 @@ namespace DocumentEditorTest
         [TestMethod]
         public void CanRedo10LastParagraphInsertion()
         {
-            _10ParagraphsDocument.InsertParagraph("11");
-            _10ParagraphsDocument.InsertParagraph("12");
-            _10ParagraphsDocument.InsertParagraph("13");
+            _10ParagraphsDocument.InsertParagraph(-1, "11");
+            _10ParagraphsDocument.InsertParagraph(-1, "12");
+            _10ParagraphsDocument.InsertParagraph(-1, "13");
 
             _10ParagraphsDocument.Undo();
             _10ParagraphsDocument.Undo();
@@ -234,9 +234,9 @@ namespace DocumentEditorTest
         [TestMethod]
         public void CanRedoParagraphInsertionWithClearHistory()
         {
-            _10ParagraphsDocument.InsertParagraph("11");
-            _10ParagraphsDocument.InsertParagraph("12");
-            _10ParagraphsDocument.InsertParagraph("13");
+            _10ParagraphsDocument.InsertParagraph(-1, "11");
+            _10ParagraphsDocument.InsertParagraph(-1, "12");
+            _10ParagraphsDocument.InsertParagraph(-1, "13");
 
             _10ParagraphsDocument.Undo();
             _10ParagraphsDocument.Undo();
@@ -266,8 +266,8 @@ namespace DocumentEditorTest
                 new List<string> { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" });
 
             // напишем новую историю
-            _10ParagraphsDocument.InsertParagraph("11'");
-            _10ParagraphsDocument.InsertParagraph("12'");
+            _10ParagraphsDocument.InsertParagraph(-1, "11'");
+            _10ParagraphsDocument.InsertParagraph(-1, "12'");
             AreDocumentTitleAndParagraphsEqual(_10ParagraphsDocument, null,
                 new List<string> { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11'", "12'" });
 
@@ -301,6 +301,7 @@ namespace DocumentEditorTest
         [TestMethod]
         public void CanSaveDocumentAsHTMLFile()
         {
+            
             _10ParagraphsDocument.Save("test");
         }
 
