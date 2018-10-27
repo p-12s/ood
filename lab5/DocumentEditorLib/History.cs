@@ -5,14 +5,14 @@ namespace DocumentEditorLib
     public class History
     {
         private readonly int _maxNumberOfCommandsRremembered;
-        private LinkedList<ICommand> _commands;
-        private LinkedList<ICommand> _canceledCommands;
+        private LinkedList<IUndoableAction> _commands;
+        private LinkedList<IUndoableAction> _canceledCommands;
 
         public History()
         {
             _maxNumberOfCommandsRremembered = 10;
-            _commands = new LinkedList<ICommand>();
-            _canceledCommands = new LinkedList<ICommand>();
+            _commands = new LinkedList<IUndoableAction>();
+            _canceledCommands = new LinkedList<IUndoableAction>();
         }
 
         public bool CanUndo()
@@ -42,14 +42,14 @@ namespace DocumentEditorLib
             if (CanRedo())
             {
                 var recoverableCommand = _canceledCommands.First.Value;
-                recoverableCommand.Execute(false); // восстанавливаемая команда, а не новая
+                recoverableCommand.Execute();
 
                 _commands.AddLast(recoverableCommand);
                 _canceledCommands.RemoveFirst();
             }
         }
 
-        public void AddCommand(ICommand command)
+        public void AddCommand(IUndoableAction command)
         {
             _commands.AddLast(command);
 

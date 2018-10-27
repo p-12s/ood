@@ -8,7 +8,7 @@ namespace DocumentEditorApp
     {
         static void Main(string[] args)
         {
-            Document doc = new Document();
+            Document doc = new Document("");
             Menu menu = new Menu();
 
             menu.AddItem("Help", "Displays information about commands", 
@@ -23,19 +23,37 @@ namespace DocumentEditorApp
                     new List(doc)
                 }
             );
-            menu.AddItem("InsertParagraph", "Inserts text into the document position",
-                new List<ICommand>
+            /*menu.AddItem("SetTitle", "Sets the document title",
+                new List<IUndoableAction>
+                {
+                    new List(doc)
+                }
+            );*/
+
+            menu.Run();
+
+            Console.WriteLine("Bye");
+            Console.Read();
+        }
+    }
+}
+
+
+
+/*
+menu.AddItem("InsertParagraph", "Inserts text into the document position",
+                new List<IUndoableAction>
                 {
                     new InsertParagraph(doc, -1, "str")   //как сюда передавать строку и число?
                 }
             );
             menu.AddItem("DeleteItem", "Deletes the document element in transmitted position",
-                new List<ICommand>
+                new List<IUndoableAction>
                 {
                     new DeleteItem(doc, 1)
                 }
             );
-            menu.AddItem("Undo", "Cancels the previous command",
+            /*menu.AddItem("Undo", "Cancels the previous command",
                 new List<ICommand>
                 {
                     new Undo(doc)
@@ -53,10 +71,5 @@ namespace DocumentEditorApp
                     new Save(doc, "some-path")
                 }
             );
-            menu.Run();
 
-            Console.WriteLine("Bye");
-            Console.Read();
-        }
-    }
-}
+     */

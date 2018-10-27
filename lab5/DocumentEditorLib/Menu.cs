@@ -61,12 +61,14 @@ namespace DocumentEditorLib
             while (true)
             {
                 Console.Write(">");
-                command = Console.ReadLine();
+                command = Console.ReadLine().Trim();
+                // отрезать до пробела
+
                 if (command.Equals("exit", StringComparison.OrdinalIgnoreCase))
                 {
                     break;
                 }
-                //
+                // нужно разделять название команды и параметры
                 ExecuteCommand(command);
             }
         }

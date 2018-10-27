@@ -5,67 +5,33 @@ using System.Linq;
 
 namespace DocumentEditorLib
 {
-    // как тут добавить картинки по красоте?
-    public class DocumentItem
+    /*public interface IDocumentItem
     {
-        private Paragraph _paragraph;
-        private Img _img;
+        void Insert(int position, string text);
+        Paragraph Delete(int position);
+    }   
+    */
 
-        public DocumentItem(Paragraph paragraph)
-        {
-            _paragraph = paragraph;
-        }
-
-        public Paragraph GetItem()
-        {
-            return _paragraph;
-        }
-    };
-
-    /* Интерфейс документа */
-    public interface IDocument
+    public interface IDocument// : IDocumentItem
     {
         string GetTitle();
-
         void SetTitle(string title);
-
-        LinkedList<DocumentItem> GetDocumentItems();
-
-        //void InsertItem(DocumentItem documentItem, int? position = null);
-
-        void InsertParagraph(int position, string text, bool isNotRestoreCommand = true);
-
-        void DeleteItem(int index);
-
-        void Undo();
-
-        void Redo();
-
-        void Save(string path);
-
-        /*
-        void InsertImage(Img img);
-
-        T GetItem(int index);
-
-        // Сохраняет документ в формате html. Изображения сохраняются в подкаталог images
-        // пути к изображениям указываются относительно пути к сохраняемому HTML файлу
-        void Save(string path);
-        */
+        void InsertParagraph(int position, string text);
+        Paragraph DeleteParagraph(int position);
+        LinkedList<IParagraph> GetDocumentItems();
     }
+
 
     public class Document : IDocument
     {
         private string _title;
-        private LinkedList<DocumentItem> _items;
+        private LinkedList<IParagraph> _items;
         private History _history;
 
-
-        public Document(string title = null)
+        public Document(string title)
         {
-            if (!string.IsNullOrEmpty(title))
-                _title = title;
-            _items = new LinkedList<DocumentItem>();
+            _title = title;
+            _items = new LinkedList<IParagraph>();
             _history = new History();
         }
 
@@ -77,73 +43,37 @@ namespace DocumentEditorLib
         public void SetTitle(string title)
         {
             _title = title;
-            _history.AddCommand(new SetTitle(this, title));
+            //_history.AddCommand(new SetTitle(this, title));
         }
 
-        public LinkedList<DocumentItem> GetDocumentItems()
+        public void InsertParagraph(int position, string text)
         {
-            return _items;
+            var cmd = new InsertParagraph(this, position, text);
         }
 
-        /*public void InsertItem(DocumentItem documentItem, int? position = null)
-        {
-            if (position == null)
-                _items.AddLast(documentItem);
-        }*/
-
-            // как считать 
-        // InsertParagraph <позиция>|end <текст параграфа>
-        public void InsertParagraph(int position, string text, bool isNotRestoreCommand = true)
-        {
-            if (position > _items.Count)
-            {
-                Console.WriteLine("Position {0} does not exist, enter from 0 to {1}", position, (_items.Count - 1));
-            }
-
-            DocumentItem item = new DocumentItem(new Paragraph(text));
-            if (position == -1) // в конец
-            {
-                _items.AddLast(item);
-            }
-            else
-            {
-                //for(int i = 0; i < _items.)
-                //AddAfter(LinkedListNode<T> node, T value): вставляет в список новый узел со значением value после узла node.
-                //LinkedListNode<Person> tom = persons.AddLast(new Person() { Name = "Tom" });
-
-                LinkedListNode<DocumentItem> lastItem = _items.First;
-                if (lastItem == null)
-                {
-                    _items.AddLast(item);
-                }
-                else
-                {
-                    int index = 0;
-                    while (position > index)
-                    {
-                        lastItem = lastItem.Next;
-                        index += 1;
-                    }
-                    //_items.AddAfter(lastItem, item); lastItem почему-то null
-                    _items.AddLast(item);
-                }
-            }
-
-            if (isNotRestoreCommand)
-                _history.AddCommand(new InsertParagraph(this, position, text));
-        }
-
-        public void DeleteItem(int index)
+        public Paragraph DeleteParagraph(int position)
         {
             //бывает удалить нужно как первый, так средний и конечный элемент
 
             // может тут возвращать этот элемент? 
-            if (index >= 0 && index < _items.Count)
+            if (position >= 0 && position < _items.Count)
             {
-                var deletedItem = _items.ElementAt(index);
+                var deletedItem = _items.ElementAt(position);
                 _items.Remove(deletedItem);
             }
+
+            return null;
+            // удалить item из коллекции и вернуть его
         }
+
+        public LinkedList<IParagraph> GetDocumentItems()
+        {
+            return _items;
+        }
+
+        
+        /*
+        
 
         public void Undo()
         {
@@ -202,7 +132,7 @@ namespace DocumentEditorLib
 
         }
 
-        /*
+        
         void InsertImage(Img img)
         {
             //Paragraph paragraph = new Paragraph(text);
@@ -211,3 +141,37 @@ namespace DocumentEditorLib
     }
 
 }
+
+
+/*
+     // как считать 
+        // InsertParagraph <позиция>|end <текст параграфа>
+        public void InsertParagraph(int position, string text)
+        {
+            if (position < 0 || position > _items.Count)
+            {
+                Console.WriteLine("Position {0} does not exist, enter from 0 to {1}", position, (_items.Count - 1));
+            }
+
+            DocumentItem item = new DocumentItem(new Paragraph(text));
+
+            LinkedListNode<DocumentItem> lastItem = _items.First;
+            if (lastItem == null)
+            {
+                _items.AddLast(item);
+            }
+            else
+            {
+                int index = 0;
+                while (position > index)
+                {
+                    lastItem = lastItem.Next;
+                    index += 1;
+                }
+                //_items.AddAfter(lastItem, item); lastItem почему-то null
+                _items.AddLast(item);
+            }
+
+        }
+     */
+
