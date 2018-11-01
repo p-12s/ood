@@ -27,96 +27,6 @@ namespace GraphicsLib
     }
 }
 
-// Пространство имен библиотеки для рисования фигур (использует GraphicsLib)
-// Код библиотеки недоступен для изменения
-namespace ShapeDrawingLib
-{
-    public struct Point
-    {
-        public int X;
-        public int Y;
-
-        public Point(int x, int y)
-        {
-            X = x;
-            Y = y;
-        }
-    };
-
-    // Интерфейс объектов, которые могут быть нарисованы на холсте из GraphicsLib
-    public interface ICanvasDrawable
-    {
-        void Draw(GraphicsLib.ICanvas canvas);
-    };
-
-    public class Triangle : ICanvasDrawable
-    {
-        private Point _p1, _p2, _p3; //TODO дописать приватную часть 
-
-        public Triangle(Point p1, Point p2, Point p3)
-        {
-            // TODO: написать код конструктора
-            _p1 = p1;
-            _p2 = p2;
-            _p3 = p3;
-        }
-
-        public void Draw(GraphicsLib.ICanvas canvas)
-        {
-            Console.WriteLine("Draw a Triangle:");
-            canvas.MoveTo(_p1.X, _p1.Y);
-            canvas.LineTo(_p2.X, _p2.Y);
-            canvas.LineTo(_p3.X, _p3.Y);
-            canvas.LineTo(_p1.X, _p1.Y);
-        }
-    }
-
-    public class Rectangle : ICanvasDrawable
-    {
-        private Point _leftTop;
-        private int _width, _height; // TODO: дописать приватную часть
-
-        public Rectangle(Point leftTop, int width, int height)
-        {
-            // TODO: написать код конструктора
-            _leftTop = leftTop;
-            _width = width;
-            _height = height;
-        }
-
-        public void Draw(GraphicsLib.ICanvas canvas) // TODO тут все const override. как это будет в шарпе? может использовать шаблонный метод?
-        {
-            Console.WriteLine("Draw a Rectangle");
-            canvas.MoveTo(_leftTop.X, _leftTop.Y);
-            canvas.LineTo(_leftTop.X + _width, _leftTop.Y);
-            canvas.LineTo(_leftTop.X + _width, _leftTop.Y - _height);
-            canvas.LineTo(_leftTop.X, _leftTop.Y - _height);
-            canvas.LineTo(_leftTop.X, _leftTop.Y);
-        }
-    };
-
-    // Художник, способный рисовать ICanvasDrawable-объекты на ICanvas
-    public class CanvasPainter
-    {
-        private ICanvasDrawable _obj;
-        private GraphicsLib.ICanvas _canvas;
-
-        // TODO: дописать приватную часть
-        public CanvasPainter(GraphicsLib.ICanvas canvas)
-        {
-            // TODO: дописать конструктор класса
-            _canvas = canvas;
-        }
-
-        public void Draw(ICanvasDrawable obj)
-	    {
-            _obj = obj;
-            // TODO: дописать код рисования ICanvasDrawable на canvas, переданном в конструктор
-            _obj.Draw(_canvas);
-        }
-    };
-}
-
 
 // Пространство имен современной графической библиотеки (недоступно для изменения)
 namespace ModernGraphicsLib
@@ -183,7 +93,7 @@ namespace ModernGraphicsLib
 
         public void Dispose()
         {
-            Dispose(true);            
+            Dispose(true);
             GC.SuppressFinalize(this); // подавляем финализацию
         }
 
@@ -220,8 +130,8 @@ namespace ModernGraphicsLib
 
         // Выполняет рисование линии
         public void DrawLine(Point start, Point end)
-	    {
-		    if (!_drawing)
+        {
+            if (!_drawing)
                 throw new InvalidOperationException("DrawLine is allowed between BeginDraw()/EndDraw() only");
 
             Console.WriteLine("(<line from X=\"{0}\" from Y=\"{1}\" to X=\"{2}\" to Y=\"{3}\"/>)", start.X, start.Y, end.X, end.Y);
@@ -239,6 +149,107 @@ namespace ModernGraphicsLib
 
     };
 }
+
+
+// Пространство имен библиотеки для рисования фигур (использует GraphicsLib)
+// Код библиотеки недоступен для изменения
+namespace ShapeDrawingLib
+{
+    public struct Point
+    {
+        public int X;
+        public int Y;
+
+        public Point(int x, int y)
+        {
+            X = x;
+            Y = y;
+        }
+    };
+
+    // Интерфейс объектов, которые могут быть нарисованы на холсте из GraphicsLib
+    public interface ICanvasDrawable
+    {
+        void Draw(GraphicsLib.ICanvas canvas);
+    };
+
+    public class Triangle : ICanvasDrawable
+    {
+        private Point _p1, _p2, _p3;
+
+        public Triangle(Point p1, Point p2, Point p3)
+        {
+            _p1 = p1;
+            _p2 = p2;
+            _p3 = p3;
+        }
+
+        public void Draw(GraphicsLib.ICanvas canvas)
+        {
+            Console.WriteLine("Draw a Triangle:");
+            canvas.MoveTo(_p1.X, _p1.Y);
+            canvas.LineTo(_p2.X, _p2.Y);
+            canvas.LineTo(_p3.X, _p3.Y);
+            canvas.LineTo(_p1.X, _p1.Y);
+        }
+    }
+
+    public class Rectangle : ICanvasDrawable
+    {
+        private Point _leftTop;
+        private int _width, _height;
+
+        public Rectangle(Point leftTop, int width, int height)
+        {
+            _leftTop = leftTop;
+            _width = width;
+            _height = height;
+        }
+
+        public void Draw(GraphicsLib.ICanvas canvas)
+        {
+            Console.WriteLine("Draw a Rectangle");
+            canvas.MoveTo(_leftTop.X, _leftTop.Y);
+            canvas.LineTo(_leftTop.X + _width, _leftTop.Y);
+            canvas.LineTo(_leftTop.X + _width, _leftTop.Y - _height);
+            canvas.LineTo(_leftTop.X, _leftTop.Y - _height);
+            canvas.LineTo(_leftTop.X, _leftTop.Y);
+        }
+    };
+
+    // Художник, способный рисовать ICanvasDrawable-объекты на ICanvas
+    public class CanvasPainter
+    {
+        private ICanvasDrawable _obj;
+        private GraphicsLib.ICanvas _canvas;
+
+        public CanvasPainter(GraphicsLib.ICanvas canvas)
+        {
+            _canvas = canvas;
+        }
+
+        public void Draw(ICanvasDrawable obj)
+	    {
+            _obj = obj;
+            _obj.Draw(_canvas);
+        }
+    };
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 namespace GraphicsLibPro
 {
