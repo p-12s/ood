@@ -5,20 +5,30 @@ namespace GraphicsApp
     class ModernCanvasAdapter : GraphicsLib.ICanvas
     {
         private ModernGraphicsLib.ModernGraphicsRenderer _modernGraphicsRenderer;
+        private ModernGraphicsLib.Point _start;
+        private ModernGraphicsLib.Point _end;
 
         public ModernCanvasAdapter(ModernGraphicsLib.ModernGraphicsRenderer modernGraphicsRenderer)
         {
             _modernGraphicsRenderer = modernGraphicsRenderer;
+            _modernGraphicsRenderer.BeginDraw();
         }
 
         public void MoveTo(int x, int y)
         {
-            _modernGraphicsRenderer.BeginDraw();
+            _start = new ModernGraphicsLib.Point(x, y);
         }
 
         public void LineTo(int x, int y)
         {
-            //_modernGraphicsRenderer.DrawLine();
+            _end = new ModernGraphicsLib.Point(x, y);
+            _modernGraphicsRenderer.DrawLine(_start, _end);
+            _start = _end;
+        }
+
+        ~ModernCanvasAdapter()
+        {
+            _modernGraphicsRenderer.EndDraw();
         }
     }
 
@@ -46,15 +56,9 @@ namespace GraphicsApp
             Console.WriteLine("Новое API:");
             var renderer = new ModernGraphicsLib.ModernGraphicsRenderer();
 
-
             ModernCanvasAdapter modernAdapter = new ModernCanvasAdapter(renderer);
             var painter = new ShapeDrawingLib.CanvasPainter(modernAdapter);
             PaintPicture(painter, obj);
-
-
-            // TODO: при помощи существующей функции PaintPicture() нарисовать
-            // картину на renderer
-            // Подсказка: используйте паттерн "Адаптер"
         }
 
         static void Main(string[] args)
@@ -77,12 +81,18 @@ namespace GraphicsApp
 
             if (choice.ToLower() == "y")
             {
+                Console.WriteLine("\nDraw a Triangle");
                 PaintPictureOnModernGraphicsRenderer(triangle);
+
+                Console.WriteLine("\nDraw a Rectangle");
                 PaintPictureOnModernGraphicsRenderer(rectangle);
             }
             else
             {
+                Console.WriteLine("\nDraw a Triangle");
                 PaintPictureOnCanvas(triangle);
+
+                Console.WriteLine("\nDraw a Rectangle");
                 PaintPictureOnCanvas(rectangle);
             }
             

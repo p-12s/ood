@@ -46,7 +46,6 @@ namespace ModernGraphicsLib
     // Класс для современного рисования графики
     public class ModernGraphicsRenderer : IDisposable
     {
-        //private Stream _out; для простоты выводим к консоль
         private bool _drawing;
         private bool _disposed;
 
@@ -113,6 +112,7 @@ namespace ModernGraphicsLib
 
         ~ModernGraphicsRenderer()
         {
+            EndDraw();
             Dispose(false);
         }
 
@@ -134,7 +134,7 @@ namespace ModernGraphicsLib
             if (!_drawing)
                 throw new InvalidOperationException("DrawLine is allowed between BeginDraw()/EndDraw() only");
 
-            Console.WriteLine("(<line from X=\"{0}\" from Y=\"{1}\" to X=\"{2}\" to Y=\"{3}\"/>)", start.X, start.Y, end.X, end.Y);
+            Console.WriteLine("<line from X=\"{0}\" from Y=\"{1}\" to X=\"{2}\" to Y=\"{3}\"/>", start.X, start.Y, end.X, end.Y);
         }
 
         // Этот метод должен быть вызван в конце рисования
@@ -186,7 +186,6 @@ namespace ShapeDrawingLib
 
         public void Draw(GraphicsLib.ICanvas canvas)
         {
-            Console.WriteLine("Draw a Triangle:");
             canvas.MoveTo(_p1.X, _p1.Y);
             canvas.LineTo(_p2.X, _p2.Y);
             canvas.LineTo(_p3.X, _p3.Y);
@@ -208,7 +207,6 @@ namespace ShapeDrawingLib
 
         public void Draw(GraphicsLib.ICanvas canvas)
         {
-            Console.WriteLine("Draw a Rectangle");
             canvas.MoveTo(_leftTop.X, _leftTop.Y);
             canvas.LineTo(_leftTop.X + _width, _leftTop.Y);
             canvas.LineTo(_leftTop.X + _width, _leftTop.Y - _height);
