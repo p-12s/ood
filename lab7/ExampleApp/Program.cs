@@ -7,43 +7,52 @@ namespace ExampleApp
     {
         static void Main(string[] args)
         {
-            Component fileSystem = new Directory("File system");
+            Client client = new Client();
+            Component leaf = new Leaf();
 
-            // определяем новый диск
-            Component diskC = new Directory("Disk C");
+            Console.WriteLine("\n\nClient: I get a simple component:");
+            client.ClientCode(leaf);
 
-            // новые файлы
-            Component pngFile = new File("12345.png");
-            Component docxFile = new File("Document.docx");
+            Composite tree = new Composite();
 
-            // добавляем файлы на диск С
-            diskC.Add(pngFile);
-            diskC.Add(docxFile);
+            Composite branch1 = new Composite();
+            branch1.Add(new Leaf());
+            branch1.Add(new Leaf());
 
-            // добавляем диск С в файловую систему
-            fileSystem.Add(diskC);
+            Composite branch2 = new Composite();
+            branch2.Add(new Leaf());
 
-            // выводим все данные
-            fileSystem.Print();
-            Console.WriteLine();
+            tree.Add(branch1);
+            tree.Add(branch2);
 
-            // удаляем с диска С файл
-            diskC.Remove(pngFile);
+            Console.WriteLine("\n\nClient: Now I get a composite tree:");
+            client.ClientCode(tree);
 
-            // создаем новую папку
-            Component docsFolder = new Directory("My documents");
-
-            // добавляем в нее файлы
-            Component txtFile = new File("readme.txt");
-            Component csFile = new File("Program.cs");
-            docsFolder.Add(txtFile);
-            docsFolder.Add(csFile);
-
-            diskC.Add(docsFolder);
-
-            fileSystem.Print();
-
-            Console.Read();
+            Console.Write("\n\nClient: I can merge two components without checking their classes:\n");
+            client.ClientCode2(tree, leaf);
         }
+
+        class Client
+        {
+            public void ClientCode(Component leaf)
+            {
+                Console.Write("RESULT: ");
+                leaf.Operation();
+            }
+
+            public void ClientCode2(Component component1, Component component2)
+            {
+                if (component1.IsComposite())
+                {
+                    component1.Add(component2);
+                }
+
+                Console.Write("RESULT: ");
+                component1.Operation();
+
+                Console.WriteLine();
+            }
+        }
+
     }
 }
