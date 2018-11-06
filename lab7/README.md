@@ -7,7 +7,7 @@
 
 
 ### UML паттерна:
-![](https://metanit.com/sharp/patterns/pics/composite.png)
+![](https://raw.githubusercontent.com/p-12s/ood/master/lab7/composite.png)
 
 ### Участники
 <b>Component:</b> определяет интерфейс для всех компонентов в древовидной структуре  
