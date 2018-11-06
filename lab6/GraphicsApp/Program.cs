@@ -44,7 +44,7 @@ namespace GraphicsApp
 
         static void PaintPictureOnCanvas(ShapeDrawingLib.ICanvasDrawable obj)
         {
-            Console.WriteLine("Старое API:");
+            Console.WriteLine("Old API:");
             var simpleCanvas = new GraphicsLib.Canvas();
             var painter = new ShapeDrawingLib.CanvasPainter(simpleCanvas);
             PaintPicture(painter, obj);
@@ -53,7 +53,7 @@ namespace GraphicsApp
 
         static void PaintPictureOnModernGraphicsRenderer(ShapeDrawingLib.ICanvasDrawable obj)
         {
-            Console.WriteLine("Новое API:");
+            Console.WriteLine("New API:");
             var renderer = new ModernGraphicsLib.ModernGraphicsRenderer();
 
             ModernCanvasAdapter modernAdapter = new ModernCanvasAdapter(renderer);
