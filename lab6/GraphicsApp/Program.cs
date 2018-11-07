@@ -7,6 +7,7 @@ namespace GraphicsApp
         private ModernGraphicsLib.ModernGraphicsRenderer _modernGraphicsRenderer;
         private ModernGraphicsLib.Point _start;
         private ModernGraphicsLib.Point _end;
+        private bool _disposed;
 
         public ModernCanvasAdapter(ModernGraphicsLib.ModernGraphicsRenderer modernGraphicsRenderer)
         {
@@ -26,16 +27,33 @@ namespace GraphicsApp
             _start = _end;
         }
 
-        ~ModernCanvasAdapter()
+        #region Destructor
+
+        protected virtual void Dispose(bool disposing)
         {
-            _modernGraphicsRenderer.EndDraw();
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                    //dispose managed resources
+                    _modernGraphicsRenderer.EndDraw();
+                }
+            }
+            //dispose unmanaged resources
+            _disposed = true;
         }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        #endregion
     }
 
-
     class Program
-    {
-        
+    {        
         static void PaintPicture(ShapeDrawingLib.CanvasPainter painter, 
             ShapeDrawingLib.ICanvasDrawable obj)
         {
@@ -50,21 +68,20 @@ namespace GraphicsApp
             PaintPicture(painter, obj);
         }
 
-
         static void PaintPictureOnModernGraphicsRenderer(ShapeDrawingLib.ICanvasDrawable obj)
         {
             Console.WriteLine("New API:");
             var renderer = new ModernGraphicsLib.ModernGraphicsRenderer();
+            using (ModernCanvasAdapter modernAdapter = new ModernCanvasAdapter(renderer))
+            {
+                var painter = new ShapeDrawingLib.CanvasPainter(modernAdapter);
+                PaintPicture(painter, obj);
+            }
 
-            ModernCanvasAdapter modernAdapter = new ModernCanvasAdapter(renderer);
-            var painter = new ShapeDrawingLib.CanvasPainter(modernAdapter);
-            PaintPicture(painter, obj);
         }
 
         static void Main(string[] args)
         {
-            
-
             var triangle = new ShapeDrawingLib.Triangle(
                 new ShapeDrawingLib.Point(10, 15),
                 new ShapeDrawingLib.Point(100, 200),
@@ -74,7 +91,6 @@ namespace GraphicsApp
             var rectangle = new ShapeDrawingLib.Rectangle(
                 new ShapeDrawingLib.Point(10, 15), 18, 24
             );
-
 
             Console.WriteLine("Should we use new API (y)?");
             string choice = Console.ReadLine();
@@ -94,15 +110,9 @@ namespace GraphicsApp
 
                 Console.WriteLine("\nDraw a Rectangle");
                 PaintPictureOnCanvas(rectangle);
-            }
-            
+            }            
 
             Console.ReadLine();
-
-            
-
-         
-
         }
     }
 }

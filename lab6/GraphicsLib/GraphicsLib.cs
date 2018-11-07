@@ -3,7 +3,7 @@
 // Пространство имен графической библиотеки (недоступно для изменения)
 namespace GraphicsLib
 {
-    public interface ICanvas
+    public interface ICanvas : IDisposable
     {
         // Ставит "перо" в точку x, y
         void MoveTo(int x, int y);
@@ -15,6 +15,8 @@ namespace GraphicsLib
     // Реализация холста для рисования
     public class Canvas : ICanvas
     {
+        private bool _disposed;
+
         public void MoveTo(int x, int y)
         {
             Console.WriteLine("MoveTo ({0}, {1})", x, y);
@@ -24,6 +26,29 @@ namespace GraphicsLib
         {
             Console.WriteLine("LineTo ({0}, {1})", x, y);
         }
+
+        #region Destructor
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                    //dispose managed resources
+                }
+            }
+            //dispose unmanaged resources
+            _disposed = true;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        #endregion
     }
 }
 
@@ -233,18 +258,6 @@ namespace ShapeDrawingLib
         }
     };
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
