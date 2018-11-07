@@ -112,7 +112,6 @@ namespace GraphicsApp
                 PaintPictureOnCanvas(rectangle);
             }            
 
-            Console.ReadLine();
         }
     }
 }
