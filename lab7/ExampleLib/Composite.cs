@@ -1,6 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 
+/*
+ * pattern
+https://refactoring.guru/ru/design-patterns/composite
+*/
+
 namespace ExampleLib
 {
     public abstract class Component // Component: определяет интерфейс для всех компонентов в древовидной структуре
