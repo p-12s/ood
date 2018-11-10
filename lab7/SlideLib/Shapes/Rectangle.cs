@@ -1,5 +1,4 @@
-﻿using RGBAColor = System.UInt32;
-using RectD = SlideLib.Rect<int>;
+﻿using RectD = SlideLib.Rect<int>;
 
 namespace SlideLib.Shapes
 {

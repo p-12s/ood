@@ -52,7 +52,7 @@ class Program
 
 
         // ЭЛЛИПС
-        var ellipse = new Ellipse(new Point<int>(0, 0), 10, 20, 0);
+        var ellipse = new Ellipse(new Point<int>(0, 0), 10, 20);
         // обводка
         lineStyle = ellipse.GetLineStyle();
         ellipse.SetLineStyle(style1);
@@ -65,7 +65,7 @@ class Program
 
 
         // ТРЕУГОЛЬНИК
-
+        var triangle = new Triangle(new Point<int>(0, 0), new Point<int>(10, 10), new Point<int>(-10, -10));
 
 
         var a = 1;
