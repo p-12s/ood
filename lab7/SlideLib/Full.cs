@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using RGBAColor = System.UInt32;
-using RectD = SlideLib.Rect<double>;
+using RectD = SlideLib.Rect<int>;
 
 
 namespace SlideLib

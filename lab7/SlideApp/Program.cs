@@ -1,6 +1,6 @@
 ﻿using System;
 using RGBAColor = System.UInt32;
-using RectD = SlideLib.Rect<double>;
+using RectD = SlideLib.Rect<int>;
 using SlideLib;
 using SlideLib.Shapes;
 
@@ -23,8 +23,8 @@ class Program
 
     static void Main(string[] args)
     {
-        // прямоугольник
-        var rectangle = new Rectangle(new Point(1, 10), new Point(10, 1));
+        // ПРЯМОУГОЛЬНИК
+        var rectangle = new Rectangle(new Point<int>(1, 10), new Point<int>(10, 1));
         
         // получить фрейм
         var rectangleFrame = rectangle.GetFrame();
@@ -32,10 +32,8 @@ class Program
         // изменить фрейм
         var newFrame = new RectD
         {
-            top = 100,
-            left = 10,
-            width = 50,
-            height = 60
+            topLeft = new Point<int>(10, 100),
+            bottomRight = new Point<int>(100, 10)
         };
         rectangle.SetFrame(newFrame);
         rectangleFrame = rectangle.GetFrame();
@@ -53,11 +51,20 @@ class Program
         fillStyle = rectangle.GetFillStyle();
 
 
+        // ЭЛЛИПС
+        var ellipse = new Ellipse(new Point<int>(0, 0), 10, 20, 0);
+        // обводка
+        lineStyle = ellipse.GetLineStyle();
+        ellipse.SetLineStyle(style1);
+        lineStyle = ellipse.GetLineStyle();
+
+        // заливка
+        fillStyle = ellipse.GetFillStyle();
+        ellipse.SetFillStyle(style2);
+        fillStyle = ellipse.GetFillStyle();
 
 
-        // добавить вторую с методами
-
-        // и третью
+        // ТРЕУГОЛЬНИК
 
 
 

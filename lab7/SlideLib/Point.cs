@@ -1,14 +1,21 @@
 ﻿namespace SlideLib
 {
-    public class Point
+    public struct Point<T>
     {
-        public Point(double x, double y)
+        public Point(T x, T y)
         {
             X = x;
             Y = y;
         }
 
-        public double X {get; set;}
-        public double Y {get; set;}
+        public T X {get; set;}
+        public T Y {get; set;}
     }
+
+    public struct Rect<T>
+    {
+        public Point<T> topLeft { get; set; }
+        public Point<T> bottomRight { get; set; }
+    };
+
 }

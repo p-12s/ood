@@ -1,16 +1,16 @@
 ﻿using RGBAColor = System.UInt32;
-using RectD = SlideLib.Rect<double>;
+using RectD = SlideLib.Rect<int>;
 
 namespace SlideLib.Shapes
 {
     public class Rectangle : Shape
     {
-        private Point _topLeft;
-        private Point _bottomRight;
+        private Point<int> _topLeft;
+        private Point<int> _bottomRight;
         private IStyle _lineStyle;
         private IStyle _fillStyle;
 
-        public Rectangle(Point topLeft, Point bottomRight)
+        public Rectangle(Point<int> topLeft, Point<int> bottomRight)
         {
             _topLeft = topLeft;
             _bottomRight = bottomRight;
@@ -20,20 +20,16 @@ namespace SlideLib.Shapes
         {
             return new RectD
             {
-                top = _topLeft.Y,
-                left = _topLeft.X,
-                width = (_bottomRight.X - _topLeft.X),
-                height = (_topLeft.Y - _bottomRight.Y)
+                topLeft = _topLeft,
+                bottomRight = _bottomRight
             };
 
         }
 
         public sealed override void SetFrame(RectD rect)
         {
-            _topLeft.X = rect.left;
-            _topLeft.Y = rect.top;
-            _bottomRight.X = rect.left + rect.width;
-            _bottomRight.Y = rect.top - rect.height;
+            _topLeft = rect.topLeft;
+            _bottomRight = rect.bottomRight;
         }
 
         public sealed override IStyle GetLineStyle()
@@ -58,6 +54,7 @@ namespace SlideLib.Shapes
 
         public sealed override void Draw(ICanvas canvas)
         {
+            throw new System.NotImplementedException();
         }
     };
 }
