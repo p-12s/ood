@@ -12,13 +12,6 @@ namespace SlideLib
         void Draw(ICanvas canvas);
     };
 
-    public interface IStyle
-    {
-        bool? IsEnabled();
-        void Enable(bool enable);
-        RGBAColor? GetColor();
-        void SetColor(RGBAColor color);
-    };
 
     public abstract class Component // Component: определяет интерфейс для всех компонентов в древовидной структуре
     {

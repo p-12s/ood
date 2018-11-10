@@ -3,11 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28010.2046
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExampleApp", "ExampleApp\ExampleApp.csproj", "{BDD6F3ED-0F94-402C-AAEE-335F972D6BB9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExampleApp", "ExampleApp\ExampleApp.csproj", "{BDD6F3ED-0F94-402C-AAEE-335F972D6BB9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExampleLib", "ExampleLib\ExampleLib.csproj", "{26327D6D-5294-427C-97D3-8DFD6C424D9B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExampleLib", "ExampleLib\ExampleLib.csproj", "{26327D6D-5294-427C-97D3-8DFD6C424D9B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SlideLib", "SlideLib\SlideLib.csproj", "{C641BEA5-A900-49AC-ADF6-C11952030316}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SlideLib", "SlideLib\SlideLib.csproj", "{C641BEA5-A900-49AC-ADF6-C11952030316}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SlideApp", "SlideApp\SlideApp.csproj", "{89E311E8-0CE5-4437-B721-6AE2F2DD74B1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{C641BEA5-A900-49AC-ADF6-C11952030316}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C641BEA5-A900-49AC-ADF6-C11952030316}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C641BEA5-A900-49AC-ADF6-C11952030316}.Release|Any CPU.Build.0 = Release|Any CPU
+		{89E311E8-0CE5-4437-B721-6AE2F2DD74B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{89E311E8-0CE5-4437-B721-6AE2F2DD74B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{89E311E8-0CE5-4437-B721-6AE2F2DD74B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{89E311E8-0CE5-4437-B721-6AE2F2DD74B1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
