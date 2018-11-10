@@ -31,21 +31,19 @@ namespace GraphicsApp
 
         protected virtual void Dispose(bool disposing)
         {
-            if (!_disposed)
-            {
-                if (disposing)
-                {
-                    //dispose managed resources
-                    _modernGraphicsRenderer.EndDraw();
-                }
-            }
-            //dispose unmanaged resources
             _disposed = true;
         }
 
         public void Dispose()
         {
-            Dispose(true);
+            if (!_disposed)
+            {
+                if (_modernGraphicsRenderer.IsDrawing)
+                {
+                    _modernGraphicsRenderer.EndDraw();
+                }
+                _disposed = true;
+            }
             GC.SuppressFinalize(this);
         }
 
@@ -71,12 +69,15 @@ namespace GraphicsApp
         static void PaintPictureOnModernGraphicsRenderer(ShapeDrawingLib.ICanvasDrawable obj)
         {
             Console.WriteLine("New API:");
-            var renderer = new ModernGraphicsLib.ModernGraphicsRenderer();
-            using (ModernCanvasAdapter modernAdapter = new ModernCanvasAdapter(renderer))
+            using (var renderer = new ModernGraphicsLib.ModernGraphicsRenderer())
             {
-                var painter = new ShapeDrawingLib.CanvasPainter(modernAdapter);
-                PaintPicture(painter, obj);
+                using (ModernCanvasAdapter modernAdapter = new ModernCanvasAdapter(renderer))
+                {
+                    var painter = new ShapeDrawingLib.CanvasPainter(modernAdapter);
+                    PaintPicture(painter, obj);
+                }
             }
+
 
         }
 

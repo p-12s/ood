@@ -80,6 +80,8 @@ namespace ModernGraphicsLib
             _disposed = false;
         }
 
+        public bool IsDrawing { get { return _drawing; } }
+
         #region Destructor
 
         /*
@@ -125,7 +127,7 @@ namespace ModernGraphicsLib
         {
             if (!_disposed)
             {
-                if (disposing)
+                if (disposing && _drawing)
                 {
                     // Освобождаем управляемые ресурсы
                     EndDraw();
