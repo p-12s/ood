@@ -18,11 +18,22 @@ namespace SlideLib.Shapes
 
         public sealed override RectD GetFrame()
         {
-            return new RectD();//возвр фрейм по размерам
+            return new RectD
+            {
+                top = _topLeft.Y,
+                left = _topLeft.X,
+                width = (_bottomRight.X - _topLeft.X),
+                height = (_topLeft.Y - _bottomRight.Y)
+            };
+
         }
 
         public sealed override void SetFrame(RectD rect)
-        {//пересчет координат
+        {
+            _topLeft.X = rect.left;
+            _topLeft.Y = rect.top;
+            _bottomRight.X = rect.left + rect.width;
+            _bottomRight.Y = rect.top - rect.height;
         }
 
         public sealed override IStyle GetLineStyle()

@@ -20,37 +20,42 @@ class Triangle : Shape
 
 class Program
 {
-    /*void DrawEllipse()
-    {
-        Pen myPen = new Pen(Color.Red);
-        Graphics formGraphics;
-        formGraphics = this.CreateGraphics();
-        formGraphics.DrawEllipse(myPen, new Rectangle(0, 0, 200, 300));
-        myPen.Dispose();
-        formGraphics.Dispose();
-    }
-
-     void DrawRectangle()
-    {
-        Pen myPen = new Pen(Color.Red);
-        Graphics formGraphics;
-        formGraphics = this.CreateGraphics();
-        formGraphics.DrawRectangle(myPen, new Rectangle(0, 0, 200, 300));
-        myPen.Dispose();
-        formGraphics.Dispose();
-    }*/
 
     static void Main(string[] args)
     {
-        // просто создать фигуру с заливокой и прочим
-        var rectangle = new Rectangle(new Point(0, 10), new Point(10, 0));
-        // поисграться ее методами
+        // прямоугольник
+        var rectangle = new Rectangle(new Point(1, 10), new Point(10, 1));
+        
+        // получить фрейм
+        var rectangleFrame = rectangle.GetFrame();
+
+        // изменить фрейм
+        var newFrame = new RectD
+        {
+            top = 100,
+            left = 10,
+            width = 50,
+            height = 60
+        };
+        rectangle.SetFrame(newFrame);
+        rectangleFrame = rectangle.GetFrame();
+
+        // обводка
+        var lineStyle = rectangle.GetLineStyle();
+        var style1 = new Style(0);
+        rectangle.SetLineStyle(style1);
+        lineStyle = rectangle.GetLineStyle();
+
+        // заливка
+        var fillStyle = rectangle.GetFillStyle();
+        var style2 = new Style(100);
+        rectangle.SetFillStyle(style2);
+        fillStyle = rectangle.GetFillStyle();
 
 
 
 
         // добавить вторую с методами
-
 
         // и третью
 

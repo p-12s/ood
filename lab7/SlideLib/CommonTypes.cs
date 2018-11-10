@@ -1,11 +1,11 @@
 ﻿namespace SlideLib
 {
-    public struct Rect<T>
+    public struct Rect<T> // может переделать на 2 точки? если ничего не мешает - лучше будет
     {
-        T left;
-        T top;
-        T width;
-        T height;
+        public T left { get; set; }
+        public T top { get; set; }
+        public T width { get; set; }
+        public T height { get; set; }
     };
 
     //typedef Rect<double> RectD;
