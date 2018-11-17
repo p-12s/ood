@@ -7,9 +7,11 @@ namespace ExampleApp
     {
         static void Main(string[] args)
         {
+            // клиенту не нужно знать о структуре
+            // я просто 
             Client client = new Client();
-            Component leaf = new Leaf();
 
+            Component leaf = new Leaf();
             Console.WriteLine("\n\nClient: I get a simple component:");
             client.ClientCode(leaf);
 
@@ -34,6 +36,7 @@ namespace ExampleApp
 
         class Client
         {
+            // принимает абстрактный класс, от которого наследуются и компоновщик, и лист
             public void ClientCode(Component leaf)
             {
                 Console.Write("RESULT: ");

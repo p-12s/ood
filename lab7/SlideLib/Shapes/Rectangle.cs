@@ -1,4 +1,5 @@
-﻿using RectD = SlideLib.Rect<int>;
+﻿using System;
+using RectD = SlideLib.Rect<int>;
 
 namespace SlideLib.Shapes
 {
@@ -15,7 +16,29 @@ namespace SlideLib.Shapes
             _bottomRight = bottomRight;
         }
 
-        public sealed override RectD GetFrame()
+        public override void Add(Shape Shape)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Remove(Shape Shape)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override bool IsComposite()
+        {
+            return false;
+        }
+
+        public sealed override void Draw(ref ICanvas canvas)
+        {
+            Console.Write("Rectangle");
+        }
+
+        /*
+         * 
+         * public sealed override RectD GetFrame()
         {
             return new RectD
             {
@@ -51,9 +74,7 @@ namespace SlideLib.Shapes
             _fillStyle = style;
         }
 
-        public sealed override void Draw(ICanvas canvas)
-        {
-            throw new System.NotImplementedException();
-        }
+       
+        */
     };
 }

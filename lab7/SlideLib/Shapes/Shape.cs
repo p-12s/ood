@@ -3,11 +3,13 @@ using RectD = SlideLib.Rect<int>;
 
 namespace SlideLib.Shapes
 {
+    // Определяет интерфейс для всех компонентов в древовидной структуре
     public abstract class Shape
     {
         public Shape() { }
 
-        public abstract RectD GetFrame();
+        // все операции
+        /*public abstract RectD GetFrame();
         public abstract void SetFrame(RectD rect);
 
         public abstract IStyle GetLineStyle();
@@ -16,6 +18,18 @@ namespace SlideLib.Shapes
         public abstract IStyle GetFillStyle();
         public abstract void SetFillStyle(IStyle style);
 
-        public abstract void Draw(ICanvas canvas);//в примере - virtual
+        
+
+        */
+
+        public abstract void Draw(ref ICanvas canvas);//в примере - virtual
+
+        // операции, присущие паттерну
+        public abstract void Add(Shape Shape);
+
+        public abstract void Remove(Shape Shape);
+
+        public abstract bool IsComposite();
+
     };
 }

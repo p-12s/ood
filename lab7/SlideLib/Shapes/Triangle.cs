@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using RectD = SlideLib.Rect<int>;
 
@@ -19,7 +20,27 @@ namespace SlideLib.Shapes
             _point2 = point2;
             _point3 = point3;
         }
+        public override void Add(Shape Shape)
+        {
+            throw new NotImplementedException();
+        }
 
+        public override void Remove(Shape Shape)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override bool IsComposite()
+        {
+            return false;
+        }
+
+        public sealed override void Draw(ref ICanvas canvas)
+        {
+            Console.Write("Rectangle");
+        }
+
+        /*
         public sealed override RectD GetFrame()
         {
             List<int> xCoordinats = GetXCoordinats();
@@ -62,11 +83,7 @@ namespace SlideLib.Shapes
             _fillStyle = style;
         }
 
-        public sealed override void Draw(ICanvas canvas)
-        {
-            throw new System.NotImplementedException();
-        }
-
+        */
         #region Private members
 
         private List<int> GetXCoordinats()
@@ -90,6 +107,6 @@ namespace SlideLib.Shapes
         }
 
         #endregion
-
+        
     };
 }

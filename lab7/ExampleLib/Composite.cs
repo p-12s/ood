@@ -8,7 +8,8 @@ https://refactoring.guru/ru/design-patterns/composite
 
 namespace ExampleLib
 {
-    public abstract class Component // Component: определяет интерфейс для всех компонентов в древовидной структуре
+    // определяет интерфейс для всех компонентов в древовидной структуре
+    public abstract class Component 
     {
         public Component() { }
 
@@ -21,7 +22,8 @@ namespace ExampleLib
         public abstract bool IsComposite();
     }
 
-    public class Composite : Component
+    // делегирует выполнение листу
+    public class Composite : Component // Composite - Shape
     {
         List<Component> _children = new List<Component>();
 
@@ -62,6 +64,7 @@ namespace ExampleLib
         }
     }
 
+    // лист выполняет все самостоятельно
     public class Leaf : Component
     {
         public Leaf()
