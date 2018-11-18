@@ -7,7 +7,7 @@ namespace SlideLib
         private RGBAColor _color;
         private bool _isEnabled;
 
-        public Style(RGBAColor color)// возможно не надо иниц
+        public Style(RGBAColor color = 0)// возможно не надо иниц
         {
             _color = color;
             _isEnabled = true;

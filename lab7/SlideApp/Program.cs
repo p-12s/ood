@@ -7,7 +7,7 @@ using SlideLib.Shapes;
 
 class Program
 {
-    public class Client
+    /*public class Client
     {
         // принимает абстрактный класс, от которого наследуются и компоновщик, и лист
         public void ClientCode(ICanvas canvas, Shape Shape)
@@ -29,10 +29,42 @@ class Program
             Console.WriteLine();
         }
 
-    }
-
+    }*/
+    /*
+     В приложении должен создаваться слайд, на который добавлены несколько фигур, как простых, так и составных, 
+     формирующих некоторое изображение (желательно, осмысленное). 
+     Затем приложение должно выполнять визуализацию слайда на холсте.
+         */
     static void Main(string[] args)
     {
+        var slide = new Slide();
+
+        var canvas = new Canvas();
+
+        Shape rectangle = new Rectangle(new Point<int>(1, 10), new Point<int>(10, 1));
+
+        Group tree = new Group();
+
+        Group group2 = new Group();
+        group2.Add(new Ellipse(new Point<int>(0, 0), 10, 20));
+        group2.Add(new Triangle(new Point<int>(0, 0), new Point<int>(10, 10), new Point<int>(-10, -10)));
+
+        Group group3 = new Group();
+        group3.Add(new Triangle(new Point<int>(0, 0), new Point<int>(10, 10), new Point<int>(-10, -10)));
+
+        tree.Add(group3);
+        tree.Add(group3);
+
+
+        // ОСТАНОВИЛСЯ ТУТ: создать слайдодержатель, и чтоб каждый слайд содержал фигуры и пока все. потом буду врететь этими фигурами
+
+
+
+        // умею: 
+        // объединять фигуры в группы
+        // условно рисовать фигуры (вывожу название)
+
+
         /*
         // ПРЯМОУГОЛЬНИК
         var rectangle = new Rectangle(new Point<int>(1, 10), new Point<int>(10, 1));
@@ -80,39 +112,6 @@ class Program
          */
 
 
-        Client client = new Client();
-        var canvas = new Canvas();
-
-        Shape rectangle = new Rectangle(new Point<int>(1, 10), new Point<int>(10, 1));
-
-        Console.WriteLine("\n\nClient: I get a simple shape:");
-        client.ClientCode(canvas, rectangle);
-
-        Group tree = new Group();
-
-        Group branch1 = new Group();
-        branch1.Add(new Ellipse(new Point<int>(0, 0), 10, 20));
-        branch1.Add(new Triangle(new Point<int>(0, 0), new Point<int>(10, 10), new Point<int>(-10, -10)));
-
-        Group branch2 = new Group();
-        branch2.Add(new Triangle(new Point<int>(0, 0), new Point<int>(10, 10), new Point<int>(-10, -10)));
-
-        tree.Add(branch1);
-        tree.Add(branch2);
-
-        Console.WriteLine("\n\nClient: Now I get a compaund shapes:");
-        client.ClientCode(canvas, tree);
-
-        Console.Write("\n\nClient: I can merge two compaund shape trees without checking their classes:\n");
-        client.ClientCode2(canvas, tree, rectangle);
-
-        // ОСТАНОВИЛСЯ ТУТ: создать слайдодержатель, и чтоб каждый слайд содержал фигуры и пока все. потом буду врететь этими фигурами
-
-
-
-        // умею: 
-        // объединять фигуры в группы
-        // условно рисовать фигуры (вывожу название)
 
     }
 }
