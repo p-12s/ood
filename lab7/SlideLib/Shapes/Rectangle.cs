@@ -31,7 +31,7 @@ namespace SlideLib.Shapes
             return false;
         }
 
-        public sealed override void Draw(ref ICanvas canvas)
+        public sealed override void Draw(ICanvas canvas)
         {
             Console.Write("Rectangle");
         }

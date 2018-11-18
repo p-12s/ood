@@ -29,5 +29,20 @@ namespace SlideLib
         {
             return null;
         }
+
+        public void RemoveShape(int index)
+        {
+            if (index >= _shapes.Count || index < 0)
+                throw new System.Exception("Out of range");
+
+            _shapes.RemoveAt(index);
+        }
+
+        public void Draw(ICanvas canvas)
+        {
+            foreach(var shape in _shapes)
+                shape.Draw(canvas);
+        }
+
     }
 }
