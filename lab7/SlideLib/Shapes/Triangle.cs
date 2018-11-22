@@ -37,10 +37,11 @@ namespace SlideLib.Shapes
 
         public sealed override void Draw(ICanvas canvas)
         {
-            // ОСТАНОВИЛСЯ ТУТ: как рисовать на канвасе?
-
-
-            Console.Write("Triangle");
+            Console.WriteLine("Triangle:");
+            canvas.MoveTo(_point1.X, _point1.Y);
+            canvas.LineTo(_point2.X, _point2.Y);
+            canvas.LineTo(_point3.X, _point3.Y);
+            canvas.LineTo(_point1.X, _point1.Y);
         }
 
         /*

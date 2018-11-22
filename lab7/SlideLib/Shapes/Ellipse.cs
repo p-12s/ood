@@ -37,7 +37,8 @@ namespace SlideLib.Shapes
 
         public sealed override void Draw(ICanvas canvas)
         {
-            Console.Write("Ellipse");
+            Console.WriteLine("Ellipse:");
+            canvas.DrawEllipse(_center.X, _center.Y, _horizontalRadius, _verticalRadius);
         }
 
         /*

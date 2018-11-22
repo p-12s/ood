@@ -9,7 +9,6 @@ namespace SlideLib.Shapes
 
         public Group() {}
 
-        // операции, присущие паттерну
         public override void Add(Shape Shape)
         {
             _children.Add(Shape);
@@ -27,18 +26,9 @@ namespace SlideLib.Shapes
 
         public override void Draw(ICanvas canvas)
         {
-            int i = 0;
-
-            Console.Write("Group(");
+            Console.WriteLine("\nGroup:");
             foreach (var child in _children)
-            {
                 child.Draw(canvas);
-                if (i != _children.Count - 1)
-                    Console.Write("+");
-
-                i++;
-            }
-            Console.Write(")");
         }
 
     }

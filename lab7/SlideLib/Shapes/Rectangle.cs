@@ -33,7 +33,12 @@ namespace SlideLib.Shapes
 
         public sealed override void Draw(ICanvas canvas)
         {
-            Console.Write("Rectangle");
+            Console.WriteLine("Rectangle:");
+            canvas.MoveTo(_topLeft.X, _topLeft.Y);
+            canvas.LineTo(_bottomRight.X, _topLeft.Y);
+            canvas.LineTo(_bottomRight.X, _bottomRight.Y);
+            canvas.LineTo(_topLeft.X, _bottomRight.Y);
+            canvas.LineTo(_topLeft.X, _topLeft.Y);
         }
 
         /*
