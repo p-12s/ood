@@ -23,7 +23,7 @@ namespace ExampleLib
     }
 
     // делегирует выполнение листу
-    public class Composite : Component // Composite - Shape
+    public class Composite : Component
     {
         List<Component> _children = new List<Component>();
 

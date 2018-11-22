@@ -3,7 +3,8 @@ using System.Collections.Generic;
 
 namespace SlideLib
 {
-    // Слайдом считается изображение, состоящее из набора геометрических фигур.
+    // Слайдом считается изображение, состоящее из набора 
+    // геометрических фигур.
     public class Slide
     {
         List<Shape> _shapes = new List<Shape>();

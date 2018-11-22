@@ -13,13 +13,13 @@ namespace SlideLib.Shapes
         private IStyle _lineStyle;
         private IStyle _fillStyle;
 
-
         public Triangle(Point<int> point1, Point<int> point2, Point<int> point3)
         {
             _point1 = point1;
             _point2 = point2;
             _point3 = point3;
         }
+
         public override void Add(Shape Shape)
         {
             throw new NotImplementedException();

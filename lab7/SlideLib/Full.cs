@@ -4,7 +4,6 @@ using System.Text;
 using RGBAColor = System.UInt32;
 using RectD = SlideLib.Rect<int>;
 
-
 namespace SlideLib
 {
     public interface IDrawable
