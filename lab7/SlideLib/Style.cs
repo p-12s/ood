@@ -7,7 +7,7 @@ namespace SlideLib
         private RGBAColor _color;
         private bool _isEnabled;
 
-        public Style(RGBAColor color = 0)// возможно не надо иниц
+        public Style(RGBAColor color = 0)
         {
             _color = color;
             _isEnabled = true;
@@ -31,6 +31,15 @@ namespace SlideLib
         public void SetColor(RGBAColor color)
         {
             _color = color;
+        }
+
+        public bool IsEqual(Style style)
+        {
+            // первым для сравнения-присваивания приходит null
+            if (style == null)
+                return true;
+
+            return _color == style.GetColor() && _isEnabled == style.IsEnabled();
         }
     };
 }

@@ -75,13 +75,22 @@ namespace SlideLib.Shapes
         {
             // если цвет у всех одинаковый - вернуть его
             bool isSameColor = true;
-            Style lineStyle = new Style();
+            Style lineStyle = null;
+
+            //ОСТАНОВИЛСЯ ТУТ: надо заставить сравнивать цвета
+            // далее научить ресайзить группу и фигуру
 
             foreach (var child in _children)
             {
-                lineStyle = child.GetLineStyle();
+                var style = child.GetLineStyle();
+                if (!style.IsEqual(lineStyle) /*не одинаковый*/)
+                {
+                    isSameColor = false;
+                    break;
+                }
+                lineStyle = style;
             }
-            //return _lineStyle;
+            return isSameColor ? lineStyle : null;
         }
 
 
