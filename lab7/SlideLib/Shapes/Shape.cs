@@ -20,7 +20,7 @@ namespace SlideLib.Shapes
         public abstract void SetFillStyle(IStyle style);
         */
 
-        public abstract void Draw(ref ICanvas canvas);//в примере - virtual
+        public abstract void Draw(ICanvas canvas);
 
         // операции, присущие паттерну
         public abstract void Add(Shape Shape);

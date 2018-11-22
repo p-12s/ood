@@ -25,18 +25,17 @@ namespace SlideLib.Shapes
             return true;
         }
 
-        public override void Draw(ref ICanvas canvas)
+        public override void Draw(ICanvas canvas)
         {
             int i = 0;
 
-            Console.Write("Branch(");
-            foreach (var Shape in _children)
+            Console.Write("Group(");
+            foreach (var child in _children)
             {
-                Shape.Draw(ref canvas);
+                child.Draw(canvas);
                 if (i != _children.Count - 1)
-                {
                     Console.Write("+");
-                }
+
                 i++;
             }
             Console.Write(")");

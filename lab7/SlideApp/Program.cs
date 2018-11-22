@@ -7,63 +7,49 @@ using SlideLib.Shapes;
 
 class Program
 {
-    /*public class Client
-    {
-        // принимает абстрактный класс, от которого наследуются и компоновщик, и лист
-        public void ClientCode(ICanvas canvas, Shape Shape)
-        {
-            Console.Write("RESULT: ");
-            Shape.Draw(ref canvas);
-        }
-
-        public void ClientCode2(ICanvas canvas, Shape shape1, Shape shape2)
-        {
-            if (shape1.IsComposite())
-            {
-                shape1.Add(shape2);
-            }
-
-            Console.Write("RESULT: ");
-            shape1.Draw(ref canvas);
-
-            Console.WriteLine();
-        }
-
-    }*/
     /*
      В приложении должен создаваться слайд, на который добавлены несколько фигур, как простых, так и составных, 
      формирующих некоторое изображение (желательно, осмысленное). 
      Затем приложение должно выполнять визуализацию слайда на холсте.
-         */
+    */
+
     static void Main(string[] args)
     {
         var slide = new Slide();
-
         var canvas = new Canvas();
+        
+        // поляна
+        Shape glade = new Ellipse(new Point<int>(0, 0), 8, 20);
 
-        Shape rectangle = new Rectangle(new Point<int>(1, 10), new Point<int>(10, 1));
+        // дом
+        Group house = new Group();
+        // стены с окном
+        Group wallsWithWindow = new Group();
+        wallsWithWindow.Add(new Rectangle(new Point<int>(0, 10), new Point<int>(10, 0)));
+        wallsWithWindow.Add(new Ellipse(new Point<int>(5, 5), 3, 2));
+        // крыша
+        Group roof = new Group();
+        roof.Add(new Triangle(new Point<int>(-2, 10), new Point<int>(5, 20), new Point<int>(12, 10)));
 
-        Group tree = new Group();
+        house.Add(wallsWithWindow);
+        house.Add(roof);
 
-        Group group2 = new Group();
-        group2.Add(new Ellipse(new Point<int>(0, 0), 10, 20));
-        group2.Add(new Triangle(new Point<int>(0, 0), new Point<int>(10, 10), new Point<int>(-10, -10)));
+        slide.AddShape(glade);
+        slide.AddShape(house);
 
-        Group group3 = new Group();
-        group3.Add(new Triangle(new Point<int>(0, 0), new Point<int>(10, 10), new Point<int>(-10, -10)));
-
-        tree.Add(group3);
-        tree.Add(group3);
+        slide.Draw(canvas);
 
 
         // ОСТАНОВИЛСЯ ТУТ: создать слайдодержатель, и чтоб каждый слайд содержал фигуры и пока все. потом буду манип этими фигурами
 
 
 
+        // что я могу делать с фигурами?
+
         // умею: 
         // объединять фигуры в группы
         // условно рисовать фигуры (вывожу название)
-
+        // добавить на слайд домик из линий
 
         /*
         // ПРЯМОУГОЛЬНИК
