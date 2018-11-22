@@ -10,8 +10,8 @@ namespace SlideLib.Shapes
         private Point<int> _point1;
         private Point<int> _point2;
         private Point<int> _point3;
-        private IStyle _lineStyle;
-        private IStyle _fillStyle;
+        private Style _lineStyle;
+        private Style _fillStyle;
 
         public Triangle(Point<int> point1, Point<int> point2, Point<int> point3)
         {
@@ -44,11 +44,10 @@ namespace SlideLib.Shapes
             canvas.LineTo(_point1.X, _point1.Y);
         }
 
-        /*
         public sealed override RectD GetFrame()
         {
-            List<int> xCoordinats = GetXCoordinats();
-            List<int> yCoordinats = GetYCoordinats();
+            List<int> xCoordinats = GetAllXCoordinats();
+            List<int> yCoordinats = GetAllYCoordinats();
             int maxTop = yCoordinats.Max(item => item);
             int minBottom = yCoordinats.Min(item => item);
             int minLeft = xCoordinats.Min(item => item);
@@ -61,16 +60,20 @@ namespace SlideLib.Shapes
             };
         }
 
+        public sealed override Style GetLineStyle()
+        {
+            return _lineStyle;
+        }
+
+        /*
+
         public sealed override void SetFrame(RectD rect)
         {
             // пока не буду расчитывать. а вообще, в какую сторону фрейм вырос - в ту увеличивать максимальную координату
             throw new System.NotImplementedException();
         }
 
-        public sealed override IStyle GetLineStyle()
-        {
-            return _lineStyle;
-        }
+        
 
         public sealed override void SetLineStyle(IStyle style)
         {
@@ -90,7 +93,7 @@ namespace SlideLib.Shapes
         */
         #region Private members
 
-        private List<int> GetXCoordinats()
+        private List<int> GetAllXCoordinats()
         {
             return new List<int>
             {
@@ -100,7 +103,7 @@ namespace SlideLib.Shapes
             };
         }
 
-        private List<int> GetYCoordinats()
+        private List<int> GetAllYCoordinats()
         {
             return new List<int>
             {

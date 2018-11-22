@@ -7,8 +7,8 @@ namespace SlideLib.Shapes
     {
         private Point<int> _topLeft;
         private Point<int> _bottomRight;
-        private IStyle _lineStyle;
-        private IStyle _fillStyle;
+        private Style _lineStyle;
+        private Style _fillStyle;
 
         public Rectangle(Point<int> topLeft, Point<int> bottomRight)
         {
@@ -41,28 +41,29 @@ namespace SlideLib.Shapes
             canvas.LineTo(_topLeft.X, _topLeft.Y);
         }
 
-        /*
-         * 
-         * public sealed override RectD GetFrame()
+        public sealed override RectD GetFrame()
         {
             return new RectD
             {
                 topLeft = _topLeft,
                 bottomRight = _bottomRight
             };
-
         }
 
+        public sealed override Style GetLineStyle()
+        {
+            return _lineStyle;
+        }
+
+        /*
+        
         public sealed override void SetFrame(RectD rect)
         {
             _topLeft = rect.topLeft;
             _bottomRight = rect.bottomRight;
         }
 
-        public sealed override IStyle GetLineStyle()
-        {
-            return _lineStyle;
-        }
+        
 
         public sealed override void SetLineStyle(IStyle style)
         {

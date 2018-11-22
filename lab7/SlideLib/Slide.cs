@@ -42,11 +42,7 @@ namespace SlideLib
         public void Draw(ICanvas canvas)
         {
             foreach (var shape in _shapes)
-            {
                 shape.Draw(canvas);
-            }
-
-                
         }
 
     }

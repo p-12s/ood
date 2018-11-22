@@ -9,11 +9,14 @@ namespace SlideLib.Shapes
         public Shape() { }
 
         // все операции
-        /*
         public abstract RectD GetFrame();
+
+        public abstract Style GetLineStyle();
+
+        /*
         public abstract void SetFrame(RectD rect);
 
-        public abstract IStyle GetLineStyle();
+        
         public abstract void SetLineStyle(IStyle style);
 
         public abstract IStyle GetFillStyle();
